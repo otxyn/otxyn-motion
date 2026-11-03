@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Otxyn Motion — an evidence-based web motion-graphics research library</title>
+  <meta name="description" content="133 investigated motion-graphics references, a curated 40-entry library catalogue, and an agent skill for selecting, adapting and verifying web motion at craft level.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Archivo+Black&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/site.css">
+</head>
+<body>
+  <a class="skip-link" href="#collection">Skip to the collection</a>
+
+  <!-- ======================== HERO ======================== -->
+  <header class="hero">
+    <div class="wrap">
+      <div class="masthead">
+        <span class="wordmark">Otxyn<span class="accent">·</span>Motion</span>
+        <nav class="top-nav" aria-label="Site sections">
+          <a href="#collection">Research</a>
+          <a href="#library">Library</a>
+          <a href="#docs">Docs</a>
+        </nav>
+      </div>
+
+      <p class="kicker">Evidence-based motion research — curated, licensed, agent-ready</p>
+      <h1 class="display">Motion graphics,<br>documented like a science.</h1>
+      <p class="lede" id="lede">
+        A research archive leading to a reference library of web motion-graphics:
+        every technique recorded with verified links, inspection evidence,
+        licence findings and measured performance notes — and an agent skill that
+        turns the catalogue into refined implementations.
+      </p>
+      <div class="stat-row" id="stats" aria-live="polite">
+        <!-- populated by app.js from the data bundle -->
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- ======================== RESEARCH COLLECTION ======================== -->
+    <section id="collection" class="section" aria-labelledby="collection-h">
+      <div class="wrap">
+        <div class="section-head">
+          <h2 id="collection-h" class="h2">The research collection</h2>
+          <p class="section-sub">
+            Every reference is a lead with provenance — verified links, honest
+            inspection status, licence findings. <strong>Shortlisted materials are
+            education and inspiration, not library entries.</strong>
+          </p>
+        </div>
+
+        <div class="controls" role="search">
+          <label class="search">
+            <span class="visually-hidden">Search the collection</span>
+            <input id="q" type="search" placeholder="Search 133 references — try “fluid”, “three.js”, “scramble”…" autocomplete="off">
+          </label>
+          <div class="chips" id="cat-chips" role="group" aria-label="Filter by category"><!-- chips --></div>
+          <select id="sort" aria-label="Order results">
+            <option value="score">Highest score first</option>
+            <option value="name">Name A–Z</option>
+            <option value="depth">Inspection depth first</option>
+          </select>
+        </div>
+
+        <p class="count-line" id="count-line" aria-live="polite"></p>
+        <div class="grid" id="cards"></div>
+        <p class="empty" id="empty" hidden>No references match. Try a broader term.</p>
+      </div>
+    </section>
+
+    <!-- ======================== LIBRARY ======================== -->
+    <section id="library" class="section section-alt" aria-labelledby="library-h">
+      <div class="wrap">
+        <div class="section-head">
+          <h2 id="library-h" class="h2">The library catalogue</h2>
+          <p class="section-sub">
+            The curated 40-entry build plan distilled from the research. Each
+            entry carries a licence verdict and an adaptation authority — nothing
+            is shown as a working demo here: <strong>every entry is
+            <em>planned</em>, not implemented.</strong>
+          </p>
+        </div>
+
+        <div class="legend" id="library-legend">
+          <span class="badge badge-planned">planned</span> approved intent, code not started
+          <span class="dot">·</span>
+          <span class="badge badge-adapt">adapt</span> licensed for attributed adaptation
+          <span class="dot">·</span>
+          <span class="badge badge-reinvent">reinvent</span> technique re-implemented from scratch
+          <span class="dot">·</span>
+          <span class="badge badge-pattern">pattern</span> documented study, never adopted
+        </div>
+
+        <div id="library-groups"></div>
+
+        <div class="reserve-note">
+          <h3>Reserve pool</h3>
+          <p>
+            Beyond the 40 entries, the manifest keeps a reserve of
+            <strong id="reserve-count">…</strong> high-scoring shortlisted
+            candidates (<span id="reserve-list"></span>) for post-v1 expansion.
+            Reserves are consult-only: not approved entries.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================== DOCS ======================== -->
+    <section id="docs" class="section" aria-labelledby="docs-h">
+      <div class="wrap">
+        <div class="section-head">
+          <h2 id="docs-h" class="h2">Documentation</h2>
+          <p class="section-sub">Read the research corpus and the agent skill in full. Markdown links open the raw documents served from this repository.</p>
+        </div>
+        <div class="doc-grid">
+          <a class="doc-card" href="research/README.md">
+            <span class="doc-kind">Research</span>
+            <span class="doc-title">research/README.md</span>
+            <span class="doc-desc">Archive orientation, terminology and data conventions.</span>
+          </a>
+          <a class="doc-card" href="research/TECHNIQUES.md">
+            <span class="doc-kind">Research</span>
+            <span class="doc-title">TECHNIQUES.md</span>
+            <span class="doc-desc">16 technique families with source-referenced mechanisms and constants.</span>
+          </a>
+          <a class="doc-card" href="research/LICENSES.md">
+            <span class="doc-kind">Research</span>
+            <span class="doc-title">LICENSES.md</span>
+            <span class="doc-desc">Licence findings and evidence per candidate.</span>
+          </a>
+          <a class="doc-card" href="research/reports/DATA_AUDIT.md">
+            <span class="doc-kind">Reports</span>
+            <span class="doc-title">DATA_AUDIT.md</span>
+            <span class="doc-desc">Statistics recomputed from the canonical database.</span>
+          </a>
+          <a class="doc-card" href="library/manifest.json">
+            <span class="doc-kind">Library</span>
+            <span class="doc-title">manifest.json</span>
+            <span class="doc-desc">The 40-entry catalogue: licence blocks, authorities, routes, fonts.</span>
+          </a>
+          <a class="doc-card" href="skill/SKILL.md">
+            <span class="doc-kind">Skill</span>
+            <span class="doc-title">SKILL.md</span>
+            <span class="doc-desc">Selection, licence gate and the mechanical verification loop.</span>
+          </a>
+          <a class="doc-card" href="skill/CRAFT.md">
+            <span class="doc-kind">Skill</span>
+            <span class="doc-title">CRAFT.md</span>
+            <span class="doc-desc">Craft doctrine: timing, composition, refinement and production budgets.</span>
+          </a>
+          <a class="doc-card" href="docs/ATTRIBUTION.md">
+            <span class="doc-kind">Project</span>
+            <span class="doc-title">ATTRIBUTION.md</span>
+            <span class="doc-desc">Who made what — creators behind every reference.</span>
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-foot">
+    <div class="wrap foot-grid">
+      <p>
+        <strong>Otxyn Motion</strong> — Otxyn's original work is MIT-licensed;
+        referenced third-party material stays under its own licences and is not
+        redistributed. See <a href="docs/ATTRIBUTION.md">attribution</a> and the
+        <a href="LICENSE">repo licence scope note</a>.
+      </p>
+      <p class="foot-meta">
+        Bundled fonts are OFL-verified: Honk, Inter, Roboto Flex, Anton, Space
+        Grotesk, Archivo Black. Screenshots in <code>research/previews/</code> are
+        internal research evidence.
+      </p>
+    </div>
+  </footer>
+
+  <!-- ======================== DETAIL DIALOG ======================== -->
+  <dialog id="detail" class="detail" aria-labelledby="detail-title">
+    <button class="detail-close" type="button" aria-label="Close detail">&times;</button>
+    <div id="detail-body"><!-- populated by app.js --></div>
+  </dialog>
+
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/app.js"></script>
+</body>
+</html>

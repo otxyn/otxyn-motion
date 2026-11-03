@@ -1,0 +1,26 @@
+# --- OS cruft ---
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# --- Editors ---
+.vscode/
+.idea/
+*.swp
+
+# --- Python ---
+__pycache__/
+*.pyc
+.venv/
+
+# --- Node (if a build tool is ever adopted) ---
+node_modules/
+
+# --- Local serving artifacts ---
+*.log
+.playwright-mcp/
+
+# NOTE: research/previews/ is *kept* in the repo (internal evidence). If a public
+# hosting license for those third-party demo captures is ever a concern, move
+# them to an artifact store and uncomment:
+# research/previews/

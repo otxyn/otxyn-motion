@@ -1,0 +1,2317 @@
+{
+  "name": "Otxyn Motion Library",
+  "manifest_version": "0.1.0",
+  "generated": "2026-11-03",
+  "generated_by": "research/tools/build_manifest.py",
+  "note": "Curation manifest: entries are approved *intent*, not shipped implementations. Research candidates remain in research/candidates.json and are never referenced from the website build.",
+  "library_targets": {
+    "typography": 7,
+    "particles": 6,
+    "liquid": 5,
+    "3d-shaders": 5,
+    "transitions": 7,
+    "composition": 10
+  },
+  "entry_count": 40,
+  "adaptation_authorities": {
+    "adapt": "source licence verified open (MIT/Apache-2.0/CC0) — adapted implementation ships with attribution block",
+    "reinvent": "source absent/unclear — technique-only documentation; implementation written from scratch",
+    "pattern": "closed-source demo — documented as design pattern for agent study, explicitly never adopted as code"
+  },
+  "licence_blocks": {
+    "MIT": "Copyright notice + licence text must accompany any MIT-derived file in library/; MIT adaptation keeps upstream attribution in the entry header comment.",
+    "Apache-2.0": "A NOTICE file and the Apache 2.0 text are required; modifications must be marked.",
+    "unknown/unverified": "BLOCKED from adoption — read reason in entry block; escalate to the licence owners or re-implement."
+  },
+  "fonts": {
+    "policy": "OFL-only. No unlicensed display font is ever bundled. Verified per family against google/fonts METADATA.pb on 2026-11-03.",
+    "verified": [
+      {
+        "family": "Honk",
+        "variant": "variable",
+        "licence": "OFL",
+        "evidence": "https://raw.githubusercontent.com/google/fonts/main/ofl/honk/METADATA.pb",
+        "used_by": [
+          "typ-self-variable-font-morph"
+        ]
+      },
+      {
+        "family": "Inter",
+        "licence": "OFL",
+        "evidence": "https://raw.githubusercontent.com/google/fonts/main/ofl/inter/METADATA.pb",
+        "used_by": [
+          "all DOM/UI text"
+        ]
+      },
+      {
+        "family": "Roboto Flex",
+        "variant": "variable",
+        "licence": "OFL",
+        "evidence": "https://raw.githubusercontent.com/google/fonts/main/ofl/robotoflex/METADATA.pb",
+        "used_by": [
+          "typ-self-rolling-counter (variable height/width for digit morphing)"
+        ]
+      },
+      {
+        "family": "Anton",
+        "licence": "OFL",
+        "evidence": "https://raw.githubusercontent.com/google/fonts/main/ofl/anton/METADATA.pb",
+        "used_by": [
+          "split-text/kinetic display headline"
+        ]
+      },
+      {
+        "family": "Space Grotesk",
+        "licence": "OFL",
+        "evidence": "https://raw.githubusercontent.com/google/fonts/main/ofl/spacegrotesk/METADATA.pb",
+        "used_by": [
+          "scramble/tech-flavoured text"
+        ]
+      },
+      {
+        "family": "Archivo Black",
+        "licence": "OFL",
+        "evidence": "https://raw.githubusercontent.com/google/fonts/main/ofl/archivoblack/METADATA.pb",
+        "used_by": [
+          "text-particles raster source (heaviest mass)"
+        ]
+      }
+    ],
+    "avoided": [
+      "Any font referenced by third-party demos without asserted OFL status",
+      "GSAP-provided or Codrops-bundled fonts (unknown packaged licence)",
+      "Third-party images/shaders/images used by inspiration demos (assets != code licences)"
+    ]
+  },
+  "route_tables": [
+    {
+      "family": "char/word stagger",
+      "default": "DOM spans + CSS variables",
+      "escalate": "GSAP timeline (licence: GSAP no-charge — do not vendor)",
+      "never": "Canvas re-draw",
+      "ref": "typography-009 constants"
+    },
+    {
+      "family": "rolling counter",
+      "default": "DOM digit columns + CSS transform",
+      "escalate": "rAF count-up + tabular-nums",
+      "never": "image-sprite flips",
+      "ref": "typography-004"
+    },
+    {
+      "family": "text to particles",
+      "default": "Canvas 2D pixel sampling",
+      "escalate": "WebGL points above ~20k particles",
+      "never": "SVG element-per-pixel",
+      "ref": "particles-023"
+    },
+    {
+      "family": "ambient metaballs",
+      "default": "SVG goo filter chain",
+      "escalate": "Canvas physics + goo above ~50 moving bodies",
+      "never": "WebGL solver (overkill)",
+      "ref": "liq-self-svg-goo-metaballs"
+    },
+    {
+      "family": "interactive fluid",
+      "default": "canvas heightfield ripple",
+      "escalate": "WebGL stable-fluids solver",
+      "never": "CSS approximation",
+      "ref": "liquid-001"
+    },
+    {
+      "family": "image distortion hover",
+      "default": "SVG feDisplacementMap (static)",
+      "escalate": "WebGL displacement shader (pointer-driven)",
+      "never": "per-pixel canvas ops",
+      "ref": "3d-shaders-007"
+    },
+    {
+      "family": "mesh gradient",
+      "default": "SVG turbulence chain",
+      "escalate": "WebGL fbm mesh-gradient shaders",
+      "never": "animated bitmap",
+      "ref": "transitions-022"
+    },
+    {
+      "family": "3D scroll scene",
+      "default": "CSS 3D transforms",
+      "escalate": "three.js camera-path tour",
+      "never": "position:fixed hacks",
+      "ref": "3d-shaders-012"
+    },
+    {
+      "family": "GPU particle equation",
+      "default": "Canvas 2D emitter",
+      "escalate": "GPGPU ping-pong textures >10k",
+      "never": "thread-per-particle",
+      "ref": "particles-025"
+    }
+  ],
+  "verification_checklist": [
+    "Load demo/implementation at 1440x900 AND 390x844 (Playwright: browser_resize then browser_take_screenshot with scale:'css').",
+    "browser_console_messages({level:'error'}) must report 0 errors for both passes.",
+    "Screenshot before/after the effect trigger and diff to prove the animation actually fires.",
+    "Toggle prefers-reduced-motion (browser_emulate_media) — the effect must degrade to a still frame or cut immediately.",
+    "Check frame-budget: rAF loops must use delta-time and not scale work with devicePixelRatio unclamped.",
+    "Verify the entry's licence block still resolves to a live licence URL at merge time."
+  ],
+  "entries": [
+    {
+      "id": "typ-self-split-text-reveal",
+      "name": "Handbook — Split Text Reveal",
+      "category": "typography",
+      "subcategory": "split-text",
+      "complexity": "low",
+      "rendering": "dom",
+      "research_candidate": "typography-011",
+      "inspiration": {
+        "demo_url": "https://matinmonshizadeh.github.io/animation-handbook/animations/02-entrance-and-exit/split-text-reveal/",
+        "source_url": "https://raw.githubusercontent.com/matinmonshizadeh/animation-handbook/main/animations/02-entrance-and-exit/split-text-reveal/index.html",
+        "repository_url": "https://github.com/matinmonshizadeh/animation-handbook",
+        "creator": "Matin Monshizadeh"
+      },
+      "description": "Heading splits into chars/lines and reveals with staggered per-character easing from the entrance section. Source fingerprints: Splitting-style char split, stagger loop, easing tokens; 31,554-byte self-contained index.html.",
+      "licensing": {
+        "source_license": "MIT",
+        "license_url": "https://github.com/matinmonshizadeh/animation-handbook",
+        "verified": true,
+        "evidence": "Repo MIT via GitHub API.",
+        "verified_date": "2026-11-03",
+        "redistribution_allowed": true,
+        "mode": "adapt permitted with attribution (MIT)"
+      },
+      "adaptation": {
+        "authority": "adapt",
+        "plan": "Adapt the handbook's dependency-free char-split stagger pipeline (MIT); split -> per-char spans -> staggered translateY/opacity with authored easing."
+      },
+      "implementation": {
+        "status": "planned",
+        "target_file": "library/typography/typ-self-split-text-reveal/",
+        "name": "not implemented yet (research phase ended at curation)"
+      },
+      "verification_required": {
+        "viewports": [
+          "1440x900",
+          "390x844"
+        ],
+        "console_errors": "0 required",
+        "reduced_motion": "prefers-reduced-motion must degrade to a still",
+        "licence_gate": "per-entry licence block must remain verified at merge time"
+      },
+      "inspection_basis": {
+        "source_inspected": true,
+        "browser_inspected": true,
+        "demo_fetched": false,
+        "confidence": "high"
+      },
+      "research_notes": "Full evidence: browser+source, 0 console errors; textbook stagger reveal."
+    },
+    {
+      "id": "typ-self-variable-font-morph",
+      "name": "Handbook — Variable Font Morph",
+      "category": "typography",
+      "subcategory": "variable-font",
+      "complexity": "low",
+      "rendering": "dom",
+      "research_candidate": "typography-012",
+      "inspiration": {
+        "demo_url": "https://matinmonshizadeh.github.io/animation-handbook/animations/05-text-typography/variable-font-morph/",
+        "source_url": "https://raw.githubusercontent.com/matinmonshizadeh/animation-handbook/main/animations/05-text-typography/variable-font-morph/index.html",
+        "repository_url": "https://github.com/matinmonshizadeh/animation-handbook",
+        "creator": "Matin Monshizadeh"
+      },
+      "description": "Letterforms morph by interpolating variable-font axes (font-variation-settings) over time. Source fingerprint: easing tokens; 26,613 bytes; no canvas/WebGL (pure CSS/text pipeline).",
+      "licensing": {
+        "source_license": "MIT",
+        "license_url": "https://github.com/matinmonshizadeh/animation-handbook",
+        "verified": true,
+        "evidence": "Repo MIT. Bundled font files: check font OFL status before redistribution.",
+        "verified_date": "2026-11-03",
+        "redistribution_allowed": true,
+        "mode": "adapt permitted with attribution (MIT)"
+      },
+      "adaptation": {
+        "authority": "adapt",
+        "plan": "Adapt font-variation-settings keyframe loop (MIT); bundle only OFL variable fonts — Honk verified OFL."
+      },
+      "implementation": {
+        "status": "planned",
+        "target_file": "library/typography/typ-self-variable-font-morph/",
+        "name": "not implemented yet (research phase ended at curation)"
+      },
+      "verification_required": {
+        "viewports": [
+          "1440x900",
+          "390x844"
+        ],
+        "console_errors": "0 required",
+        "reduced_motion": "prefers-reduced-motion must degrade to a still",
+        "licence_gate": "per-entry licence block must remain verified at merge time"
+      },
+      "inspection_basis": {
+        "source_inspected": true,
+        "browser_inspected": true,
+        "demo_fetched": false,
+        "confidence": "high"
+      },
+      "research_notes": "CSS-only variable-font morph; source ease-token fingerprint; font asset licence caution."
+    },
+    {
+      "id": "typ-self-text-on-path",
+      "name": "Handbook — Text on Path",
+      "category": "typography",
+      "subcategory": "text-path",
+      "complexity": "low",
+      "rendering": "svg",
+      "research_candidate": "typography-013",
+      "inspiration": {
+        "demo_url": "https://matinmonshizadeh.github.io/animation-handbook/animations/05-text-typography/text-on-path/",
+        "source_url": "https://raw.githubusercontent.com/matinmonshizadeh/animation-handbook/main/animations/05-text-typography/text-on-path/index.html",
+        "repository_url": "https://github.com/matinmonshizadeh/animation-handbook",
+        "creator": "Matin Monshizadeh"
+      },
+      "description": "Text laid out along a path and animated along it (SVG textPath with offset animation). Source fingerprint: requestAnimationFrame; 28,297 bytes.",
+      "licensing": {
+        "source_license": "MIT",
+        "license_url": "https://github.com/matinmonshizadeh/animation-handbook",
+        "verified": true,
+        "evidence": "Repo MIT.",
+        "verified_date": "2026-11-03",
+        "redistribution_allowed": true,
+        "mode": "adapt permitted with attribution (MIT)"
+      },
+      "adaptation": {
+        "authority": "adapt",
+        "plan": "Adapt SVG textPath startOffset animation (MIT)."
+      },
+      "implementation": {
+        "status": "planned",
+        "target_file": "library/typography/typ-self-text-on-path/",
+        "name": "not implemented yet (research phase ended at curation)"
+      },
+      "verification_required": {
+        "viewports": [
+          "1440x900",
+          "390x844"
+        ],
+        "console_errors": "0 required",
+        "reduced_motion": "prefers-reduced-motion must degrade to a still",
+        "licence_gate": "per-entry licence block must remain verified at merge time"
+      },
+      "inspection_basis": {
+        "source_inspected": true,
+        "browser_inspected": true,
+        "demo_fetched": false,
+        "confidence": "high"
+      },
+      "research_notes": "SVG textPath motion; simple and asset-free."
+    },
+    {
+      "id": "typ-self-kinetic-typography",
+      "name": "Handbook — Kinetic Typography",
+      "category": "typography",
+      "subcategory": "kinetic-layout",
+      "complexity": "medium",
+      "rendering": "dom",
+      "research_candidate": "typography-014",
+      "inspiration": {
+        "demo_url": "https://matinmonshizadeh.github.io/animation-handbook/animations/05-text-typography/kinetic-typography/",
+        "source_url": "https://raw.githubusercontent.com/matinmonshizadeh/animation-handbook/main/animations/05-text-typography/kinetic-typography/index.html",
+        "repository_url": "https://github.com/matinmonshizadeh/animation-handbook",
+        "creator": "Matin Monshizadeh"
+      },
+      "description": "Kinetic type layout where text blocks animate position/lightness by an authored timeline (rAF loop with easing curves per line). Source fingerprints: rAF, easing; 28,051 bytes.",
+      "licensing": {
+        "source_license": "MIT",
+        "license_url": "https://github.com/matinmonshizadeh/animation-handbook",
+        "verified": true,
+        "evidence": "Repo MIT.",
+        "verified_date": "2026-11-03",
+        "redistribution_allowed": true,
+        "mode": "adapt permitted with attribution (MIT)"
+      },
+      "adaptation": {
+        "authority": "adapt",
+        "plan": "Adapt rAF per-line kinetic layout (MIT); parameterise line timings."
+      },
+      "implementation": {
+        "status": "planned",
+        "target_file": "library/typography/typ-self-kinetic-typography/",
+        "name": "not implemented yet (research phase ended at curation)"
+      },
+      "verification_required": {
+        "viewports": [
+          "1440x900",
+          "390x844"
+        ],
+        "console_errors": "0 required",
+        "reduced_motion": "prefers-reduced-motion must degrade to a still",
+        "licence_gate": "per-entry licence block must remain verified at merge time"
+      },
+      "inspection_basis": {
+        "source_inspected": true,
+        "browser_inspected": true,
+        "demo_fetched": false,
+        "confidence": "high"
+      },
+      "research_notes": "Authored kinetic layout; slightly less directly reusable."
+    },
+    {
+      "id": "typ-self-scramble-text",
+      "name": "Handbook — Scramble Text",
+      "category": "typography",
+      "subcategory": "text-distort",
+      "complexity": "low",
+      "rendering": "dom",
+      "research_candidate": "typography-015",
+      "inspiration": {
+        "demo_url": "https://matinmonshizadeh.github.io/animation-handbook/animations/05-text-typography/scramble-text/",
+        "source_url": "https://raw.githubusercontent.com/matinmonshizadeh/animation-handbook/main/animations/05-text-typography/scramble-text/index.html",
+        "repository_url": "https://github.com/matinmonshizadeh/animation-handbook",
+        "creator": "Matin Monshizadeh"
+      },
+      "description": "Text decodes from random characters to real text with a per-character scramble window. Source fingerprints: rAF, CSS transforms, SVG glyphs; 29,359 bytes.",
+      "licensing": {
+        "source_license": "MIT",
+        "license_url": "https://github.com/matinmonshizadeh/animation-handbook",
+        "verified": true,
+        "evidence": "Repo MIT.",
+        "verified_date": "2026-11-03",
+        "redistribution_allowed": true,
+        "mode": "adapt permitted with attribution (MIT)"
+      },
+      "adaptation": {
+        "authority": "adapt",
+        "plan": "Adapt decode-from-noise per-char cycling (MIT); keep layout width stable via fixed box."
+      },
+      "implementation": {
+        "status": "planned",
+        "target_file": "library/typography/typ-self-scramble-text/",
+        "name": "not implemented yet (research phase ended at curation)"
+      },
+      "verification_required": {
+        "viewports": [
+          "1440x900",
+          "390x844"
+        ],
+        "console_errors": "0 required",
+        "reduced_motion": "prefers-reduced-motion must degrade to a still",
+        "licence_gate": "per-entry licence block must remain verified at merge time"
+      },
+      "inspection_basis": {
+        "source_inspected": true,
+        "browser_inspected": true,
+        "demo_fetched": false,
+        "confidence": "high"
+      },
+      "research_notes": "Scramble/decode effect with layout-stable source pattern."
+    },
+    {
+      "id": "typ-self-rolling-counter",
+      "name": "Odometer.js (HubSpot)",
+      "category": "typography",
+      "subcategory": "counter",
+      "complexity": "low",
+      "rendering": "dom",
+      "research_candidate": "typography-004",
+      "inspiration": {
+        "demo_url": "http://github.hubspot.com/odometer/docs/welcome",
+        "source_url": "https://github.com/hubspot/odometer",
+        "repository_url": "https://github.com/hubspot/odometer",
+        "creator": "Adam Schwartz / HubSpot"
+      },
+      "description": "Rolling odometer/counter that animates numeric value changes with slot-machine-style digit rolls across themed styles; driven by a MutationObserver on the element's text.",
+      "licensing": {
+        "source_license": "MIT",
+        "license_url": "https://github.com/hubspot/odometer",
+        "verified": true,
+        "evidence": "MIT verified via GitHub API (★7285).",
+        "verified_date": "2026-11-03",
+        "redistribution_allowed": true,
+        "mode": "adapt permitted with attribution (MIT)"
+      },
+      "adaptation": {
+        "authority": "adapt",
+        "plan": "INSP Odometer.js MIT (★7.3k, source read). Re-uses the documented digit-column technique; MIT permits adaptation with attribution — rebuild with tabular-nums + CSS transforms and keep the Odometer attribution header."
+      },
+      "implementation": {
+        "status": "planned",
+        "target_file": "library/typography/typ-self-rolling-counter/",
+        "name": "not implemented yet (research phase ended at curation)"
+      },
+      "verification_required": {
+        "viewports": [
+          "1440x900",
+          "390x844"
+        ],
+        "console_errors": "0 required",
+        "reduced_motion": "prefers-reduced-motion must degrade to a still",
+        "licence_gate": "per-entry licence block must remain verified at merge time"
+      },
+      "inspection_basis": {
+        "source_inspected": true,
+        "browser_inspected": false,
+        "demo_fetched": false,
+        "confidence": "high"
+      },
+      "research_notes": "README fetched; demo link verified from README content; odometer.js raw source (21,199 bytes) read 2026-11-03 — MutationObserver + digit-splitting + CSS-transition frames/DURATION constants confirmed. MIT odometer; demo verified 200; DOM pattern."
+    },
+    {
+      "id": "typ-self-text-mask-glitch",
+      "name": "CSS Text Animations collection (Prismic, 40 examples)",
+      "category": "typography",
+      "subcategory": "text-mask",
+      "complexity": "low",
+      "rendering": "css",
+      "research_candidate": "typography-006",
+      "inspiration": {
+        "demo_url": "https://prismic.io/blog/css-text-animations",
+        "source_url": "https://prismic.io/blog/css-text-animations",
+        "repository_url": "",
+        "creator": "Prismic (collection)"
+      },
+      "description": "Curated 40-example collection of CSS text animation demos: background-clip:text shimmer, glitch via ::before/::after + clip-path polygon slices, staggered word loops via @for-sass generated delays.",
+      "licensing": {
+        "source_license": "unverified",
+        "license_url": "",
+        "technique_reference_url": "https://prismic.io/blog/css-text-animations",
+        "verified": false,
+        "evidence": "Article fetched with real CSS technique excerpts; individual CodePens not opened (credit their authors before reuse).",
+        "verified_date": "2026-11-03",
+        "redistribution_allowed": "technique-level only; no source ingestion",
+        "mode": "reimplementation from documented technique"
+      },
+      "adaptation": {
+        "authority": "reinvent",
+        "plan": "Technique reference (Prismic CSS roundup) is an article, not an OSS repo — reimplement background-clip shimmer + ::before/::after clip-path glitch from the documented rules; no code reuse."
+      },
+      "implementation": {
+        "status": "planned",
+        "target_file": "library/typography/typ-self-text-mask-glitch/",
+        "name": "not implemented yet (research phase ended at curation)"
+      },
+      "verification_required": {
+        "viewports": [
+          "1440x900",
+          "390x844"
+        ],
+        "console_errors": "0 required",
+        "reduced_motion": "prefers-reduced-motion must degrade to a still",
+        "licence_gate": "per-entry licence block must remain verified at merge time"
+      },
+      "inspection_basis": {
+        "source_inspected": true,
+        "browser_inspected": false,
+        "demo_fetched": false,
+        "confidence": "medium"
+      },
+      "research_notes": "Serves as an index of canonical CSS-only text patterns with technical breakdowns."
+    },
+    {
+      "id": "par-self-text-particles",
+      "name": "Handbook — Text Particles",
+      "category": "particles",
+      "subcategory": "text-particles",
+      "complexity": "medium",
+      "rendering": "canvas-2d",
+      "research_candidate": "particles-023",
+      "inspiration": {
+        "demo_url": "https://matinmonshizadeh.github.io/animation-handbook/animations/05-text-typography/text-particles/",
+        "source_url": "https://raw.githubusercontent.com/matinmonshizadeh/animation-handbook/main/animations/05-text-typography/text-particles/index.html",
+        "repository_url": "https://github.com/matinmonshizadeh/animation-handbook",
+        "creator": "Matin Monshizadeh"
+      },
+      "description": "Canvas text rendered offscreen, sampled pixel-by-pixel into particles that assemble the glyph shapes, then react to the pointer (repel/attract). Source fingerprints: rAF, canvas, pointermove, easing; 37,001 bytes. Also captured at mobile 390x844.",
+      "licensing": {
+        "source_license": "MIT",
+        "license_url": "https://github.com/matinmonshizadeh/animation-handbook",
+        "verified": true,
+        "evidence": "Repo MIT.",
+        "verified_date": "2026-11-03",
+        "redistribution_allowed": true,
+        "mode": "adapt permitted with attribution (MIT)"
+      },
+      "adaptation": {
+        "authority": "adapt",
+        "plan": "Adapt pixel-sampling text particles (MIT; mobile-verified pointer physics)."
+      },
+      "implementation": {
+        "status": "planned",
+        "target_file": "library/particles/par-self-text-particles/",
+        "name": "not implemented yet (research phase ended at curation)"
+      },
+      "verification_required": {
+        "viewports": [
+          "1440x900",
+          "390x844"
+        ],
+        "console_errors": "0 required",
+        "reduced_motion": "prefers-reduced-motion must degrade to a still",
+        "licence_gate": "per-entry licence block must remain verified at merge time"
+      },
+      "inspection_basis": {
+        "source_inspected": true,
+        "browser_inspected": true,
+        "demo_fetched": false,
+        "confidence": "high"
+      },
+      "research_notes": "Browser+source+mobile verified; text pixel-sampling particle arch."
+    },
+    {
+      "id": "par-self-canvas-emitter",
+      "name": "Handbook — Canvas Particle Effect",
+      "category": "particles",
+      "subcategory": "emitter",
+      "complexity": "low",
+      "rendering": "canvas-2d",
+      "research_candidate": "particles-024",
+      "inspiration": {
+        "demo_url": "https://matinmonshizadeh.github.io/animation-handbook/animations/06-3d-advanced/canvas-particle-effect/",
+        "source_url": "https://raw.githubusercontent.com/matinmonshizadeh/animation-handbook/main/animations/06-3d-advanced/canvas-particle-effect/index.html",
+        "repository_url": "https://github.com/matinmonshizadeh/animation-handbook",
+        "creator": "Matin Monshizadeh"
+      },
+      "description": "Continuous 2D particle emitter on Canvas: spawn, drift, fade lifecycle with pointer emission control. Source fingerprints: rAF, canvas, pointer; 35,780 bytes.",
+      "licensing": {
+        "source_license": "MIT",
+        "license_url": "https://github.com/matinmonshizadeh/animation-handbook",
+        "verified": true,
+        "evidence": "Repo MIT.",
+        "verified_date": "2026-11-03",
+        "redistribution_allowed": true,
+        "mode": "adapt permitted with attribution (MIT)"
+      },
+      "adaptation": {
+        "authority": "adapt",
+        "plan": "Adapt spawn/ttl/fade emitter with delta-time physics (MIT)."
+      },
+      "implementation": {
+        "status": "planned",
+        "target_file": "library/particles/par-self-canvas-emitter/",
+        "name": "not implemented yet (research phase ended at curation)"
+      },
+      "verification_required": {
+        "viewports": [
+          "1440x900",
+          "390x844"
+        ],
+        "console_errors": "0 required",
+        "reduced_motion": "prefers-reduced-motion must degrade to a still",
+        "licence_gate": "per-entry licence block must remain verified at merge time"
+      },
+      "inspection_basis": {
+        "source_inspected": true,
+        "browser_inspected": true,
+        "demo_fetched": false,
+        "confidence": "high"
+      },
+      "research_notes": "Clean emitter lifecycle, delta-time physics; strong agent teaching value."
+    },
+    {
+      "id": "par-self-gpgpu-particles",
+      "name": "Handbook — GPGPU Particle System",
+      "category": "particles",
+      "subcategory": "gpu-sim",
+      "complexity": "high",
+      "rendering": "webgl-3d",
+      "research_candidate": "particles-025",
+      "inspiration": {
+        "demo_url": "https://matinmonshizadeh.github.io/animation-handbook/animations/06-3d-advanced/gpgpu-particle-system/",
+        "source_url": "https://raw.githubusercontent.com/matinmonshizadeh/animation-handbook/main/animations/06-3d-advanced/gpgpu-particle-system/index.html",
+        "repository_url": "https://github.com/matinmonshizadeh/animation-handbook",
+        "creator": "Matin Monshizadeh"
+      },
+      "description": "Thousands of particles simulated on GPU via ping-pong framebuffer state textures (position/velocity) and rendered as GL point sprites — the GPGPU particle architecture. Source fingerprints: rAF, canvas, GLSL, render-target/texture feedback; 40,900 bytes.",
+      "licensing": {
+        "source_license": "MIT",
+        "license_url": "https://github.com/matinmonshizadeh/animation-handbook",
+        "verified": true,
+        "evidence": "Repo MIT.",
+        "verified_date": "2026-11-03",
+        "redistribution_allowed": true,
+        "mode": "adapt permitted with attribution (MIT)"
+      },
+      "adaptation": {
+        "authority": "adapt",
+        "plan": "Adapt ping-pong framebuffer particle simulation (MIT); include float-texture fallback path."
+      },
+      "implementation": {
+        "status": "planned",
+        "target_file": "library/particles/par-self-gpgpu-particles/",
+        "name": "not implemented yet (research phase ended at curation)"
+      },
+      "verification_required": {
+        "viewports": [
+          "1440x900",
+          "390x844"
+        ],
+        "console_errors": "0 required",
+        "reduced_motion": "prefers-reduced-motion must degrade to a still",
+        "licence_gate": "per-entry licence block must remain verified at merge time"
+      },
+      "inspection_basis": {
+        "source_inspected": true,
+        "browser_inspected": true,
+        "demo_fetched": false,
+        "confidence": "high"
+      },
+      "research_notes": "Real GPGPU ping-pong particle sim in one file; integration harder."
+    },
+    {
+      "id": "par-self-fireworks-burst",
+      "name": "Handbook — Fireworks",
+      "category": "particles",
+      "subcategory": "burst",
+      "complexity": "medium",
+      "rendering": "canvas-2d",
+      "research_candidate": "particles-026",
+      "inspiration": {
+        "demo_url": "https://matinmonshizadeh.github.io/animation-handbook/animations/07-ambient-background/fireworks/",
+        "source_url": "https://raw.githubusercontent.com/matinmonshizadeh/animation-handbook/main/animations/07-ambient-background/fireworks/index.html",
+        "repository_url": "https://github.com/matinmonshizadeh/animation-handbook",
+        "creator": "Matin Monshizadeh"
+      },
+      "description": "Canvas fireworks: launch physics (gravity arcs) and burst explosions with emissive trails. Source fingerprints: rAF, canvas; 32,702 bytes.",
+      "licensing": {
+        "source_license": "MIT",
+        "license_url": "https://github.com/matinmonshizadeh/animation-handbook",
+        "verified": true,
+        "evidence": "Repo MIT.",
+        "verified_date": "2026-11-03",
+        "redistribution_allowed": true,
+        "mode": "adapt permitted with attribution (MIT)"
+      },
+      "adaptation": {
+        "authority": "adapt",
+        "plan": "Adapt launch->burst two-state machine (MIT)."
+      },
+      "implementation": {
+        "status": "planned",
+        "target_file": "library/particles/par-self-fireworks-burst/",
+        "name": "not implemented yet (research phase ended at curation)"
+      },
+      "verification_required": {
+        "viewports": [
+          "1440x900",
+          "390x844"
+        ],
+        "console_errors": "0 required",
+        "reduced_motion": "prefers-reduced-motion must degrade to a still",
+        "licence_gate": "per-entry licence block must remain verified at merge time"
+      },
+      "inspection_basis": {
+        "source_inspected": true,
+        "browser_inspected": true,
+        "demo_fetched": false,
+        "confidence": "high"
+      },
+      "research_notes": "Projectile physics + burst state machine."
+    },
+    {
+      "id": "par-self-particle-constellation",
+      "name": "Handbook — Particle Constellation",
+      "category": "particles",
+      "subcategory": "interactive",
+      "complexity": "low",
+      "rendering": "canvas-2d",
+      "research_candidate": "particles-027",
+      "inspiration": {
+        "demo_url": "https://matinmonshizadeh.github.io/animation-handbook/animations/07-ambient-background/particle-constellation/",
+        "source_url": "https://raw.githubusercontent.com/matinmonshizadeh/animation-handbook/main/animations/07-ambient-background/particle-constellation/index.html",
+        "repository_url": "https://github.com/matinmonshizadeh/animation-handbook",
+        "creator": "Matin Monshizadeh"
+      },
+      "description": "Drifting particles connected by proximity line segments (classic constellation/connect-the-dots ambient background) with pointer influence. Source fingerprints: rAF, canvas, pointermove, easing; 25,034 bytes.",
+      "licensing": {
+        "source_license": "MIT",
+        "license_url": "https://github.com/matinmonshizadeh/animation-handbook",
+        "verified": true,
+        "evidence": "Repo MIT.",
+        "verified_date": "2026-11-03",
+        "redistribution_allowed": true,
+        "mode": "adapt permitted with attribution (MIT)"
+      },
+      "adaptation": {
+        "authority": "adapt",
+        "plan": "Adapt proximity-link ambient field (MIT); parameterise link threshold/alpha falloff."
+      },
+      "implementation": {
+        "status": "planned",
+        "target_file": "library/particles/par-self-particle-constellation/",
+        "name": "not implemented yet (research phase ended at curation)"
+      },
+      "verification_required": {
+        "viewports": [
+          "1440x900",
+          "390x844"
+        ],
+        "console_errors": "0 required",
+        "reduced_motion": "prefers-reduced-motion must degrade to a still",
+        "licence_gate": "per-entry licence block must remain verified at merge time"
+      },
+      "inspection_basis": {
+        "source_inspected": true,
+        "browser_inspected": true,
+        "demo_fetched": false,
+        "confidence": "high"
+      },
+      "research_notes": "Proximity-connection ambient pattern; very reusable."
+    },
+    {
+      "id": "par-self-threejs-point-waves",
+      "name": "three.js example: webgl_points_waves",
+      "category": "particles",
+      "subcategory": "generative-organic",
+      "complexity": "low",
+      "rendering": "webgl-3d",
+      "research_candidate": "particles-003",
+      "inspiration": {
+        "demo_url": "https://threejs.org/examples/webgl_points_waves.html",
+        "source_url": "https://github.com/mrdoob/three.js/blob/dev/examples/webgl_points_waves.html",
+        "repository_url": "https://github.com/mrdoob/three.js",
+        "creator": "three.js contributors (mrdoob et al.)"
+      },
+      "description": "Official three.js example where a grid of GL points undulates as organic sine-wave hills with per-point color variation — a classic minimal 'living surface of dots' composition.",
+      "licensing": {
+        "source_license": "MIT",
+        "license_url": "https://github.com/mrdoob/three.js/blob/dev/LICENSE",
+        "verified": true,
+        "evidence": "three.js repository and its examples ship under the MIT license.",
+        "verified_date": "2026-11-03",
+        "redistribution_allowed": true,
+        "mode": "adapt permitted with attribution (MIT)"
+      },
+      "adaptation": {
+        "authority": "adapt",
+        "plan": "Official three.js webgl_points_waves example (MIT); ship as parameterised vertex-wave points scene."
+      },
+      "implementation": {
+        "status": "planned",
+        "target_file": "library/particles/par-self-threejs-point-waves/",
+        "name": "not implemented yet (research phase ended at curation)"
+      },
+      "verification_required": {
+        "viewports": [
+          "1440x900",
+          "390x844"
+        ],
+        "console_errors": "0 required",
+        "reduced_motion": "prefers-reduced-motion must degrade to a still",
+        "licence_gate": "per-entry licence block must remain verified at merge time"
+      },
+      "inspection_basis": {
+        "source_inspected": false,
+        "browser_inspected": false,
+        "demo_fetched": false,
+        "confidence": "high"
+      },
+      "research_notes": "Example name confirmed in threejs.org/examples/files.json (HTTP 200) and the demo page returned HTTP 200 on direct fetch; listed under 'points' in the official examples index. Official three.js point-wave example, MIT."
+    },
+    {
+      "id": "liq-self-webgl-fluid",
+      "name": "WebGL Fluid Simulation",
+      "category": "liquid",
+      "subcategory": "fluid-sim",
+      "complexity": "high",
+      "rendering": "webgl-2d",
+      "research_candidate": "liquid-001",
+      "inspiration": {
+        "demo_url": "https://paveldogreat.github.io/WebGL-Fluid-Simulation/",
+        "source_url": "https://raw.githubusercontent.com/PavelDoGreat/WebGL-Fluid-Simulation/master/script.js",
+        "repository_url": "https://github.com/PavelDoGreat/WebGL-Fluid-Simulation",
+        "creator": "Pavel Dobryakov"
+      },
+      "description": "Full-screen real-time Navier-Stokes fluid simulation that renders advected dye/smoke splats you can paint with the cursor. Implemented with raw WebGL using ping-ponged framebuffers, velocity/dye/divegence/pressure texture passes and optional multi-pass bloom.",
+      "licensing": {
+        "source_license": "MIT",
+        "license_url": "https://raw.githubusercontent.com/PavelDoGreat/WebGL-Fluid-Simulation/master/LICENSE",
+        "verified": true,
+        "evidence": "LICENSE fetched raw: 'MIT License, Copyright (c) 2017 Pavel Dobryakov'. Single-file (~2k lines) structure makes it easy to port.",
+        "verified_date": "2026-11-03",
+        "redistribution_allowed": true,
+        "mode": "adapt permitted with attribution (MIT)"
+      },
+      "adaptation": {
+        "authority": "adapt",
+        "plan": "PavelDoGreat WebGL-Fluid-Simulation (MIT, source read). Adapt solver pass order; document ping-pong/FBO graph rather than minimising the original single file."
+      },
+      "implementation": {
+        "status": "planned",
+        "target_file": "library/liquid/liq-self-webgl-fluid/",
+        "name": "not implemented yet (research phase ended at curation)"
+      },
+      "verification_required": {
+        "viewports": [
+          "1440x900",
+          "390x844"
+        ],
+        "console_errors": "0 required",
+        "reduced_motion": "prefers-reduced-motion must degrade to a still",
+        "licence_gate": "per-entry licence block must remain verified at merge time"
+      },
+      "inspection_basis": {
+        "source_inspected": true,
+        "browser_inspected": false,
+        "demo_fetched": false,
+        "confidence": "high"
+      },
+      "research_notes": "Demo served 200 and repository README verified. Source read 2026-11-03: script.js (51,849 bytes) — baseVertex shader plumbing, framebuffer/FBO ping-pong, linear-solve/advection/divergence passes and dat.GUI config panel all present; MIT header confirmed verbatim in-file. Canonical MIT fluid sim; demo + repo verified; heavy but complete."
+    },
+    {
+      "id": "liq-self-liquid-glass",
+      "name": "Handbook — Liquid Glass",
+      "category": "liquid",
+      "subcategory": "glass-distort",
+      "complexity": "medium",
+      "rendering": "svg",
+      "research_candidate": "liquid-019",
+      "inspiration": {
+        "demo_url": "https://matinmonshizadeh.github.io/animation-handbook/animations/06-3d-advanced/liquid-glass/",
+        "source_url": "https://raw.githubusercontent.com/matinmonshizadeh/animation-handbook/main/animations/06-3d-advanced/liquid-glass/index.html",
+        "repository_url": "https://github.com/matinmonshizadeh/animation-handbook",
+        "creator": "Matin Monshizadeh"
+      },
+      "description": "Apple-style liquid glass: backdrop-filter-based frosted panel whose edges refract via displacement mapping as it moves/dragged over content. Source fingerprints: rAF, backdrop-filter, pointer; 37,028 bytes.",
+      "licensing": {
+        "source_license": "MIT",
+        "license_url": "https://github.com/matinmonshizadeh/animation-handbook",
+        "verified": true,
+        "evidence": "Repo MIT.",
+        "verified_date": "2026-11-03",
+        "redistribution_allowed": true,
+        "mode": "adapt permitted with attribution (MIT)"
+      },
+      "adaptation": {
+        "authority": "adapt",
+        "plan": "Handbook liquid glass (MIT): backdrop-filter + edge displacement map + drag."
+      },
+      "implementation": {
+        "status": "planned",
+        "target_file": "library/liquid/liq-self-liquid-glass/",
+        "name": "not implemented yet (research phase ended at curation)"
+      },
+      "verification_required": {
+        "viewports": [
+          "1440x900",
+          "390x844"
+        ],
+        "console_errors": "0 required",
+        "reduced_motion": "prefers-reduced-motion must degrade to a still",
+        "licence_gate": "per-entry licence block must remain verified at merge time"
+      },
+      "inspection_basis": {
+        "source_inspected": true,
+        "browser_inspected": true,
+        "demo_fetched": false,
+        "confidence": "high"
+      },
+      "research_notes": "Liquid Glass with backdrop-filter + displacement; modern flagship aesthetic."
+    },
+    {
+      "id": "liq-self-morphing-blob",
+      "name": "Handbook — Morphing Blob",
+      "category": "liquid",
+      "subcategory": "blob",
+      "complexity": "medium",
+      "rendering": "canvas-2d",
+      "research_candidate": "liquid-020",
+      "inspiration": {
+        "demo_url": "https://matinmonshizadeh.github.io/animation-handbook/animations/06-3d-advanced/morphing-blob/",
+        "source_url": "https://raw.githubusercontent.com/matinmonshizadeh/animation-handbook/main/animations/06-3d-advanced/morphing-blob/index.html",
+        "repository_url": "https://github.com/matinmonshizadeh/animation-handbook",
+        "creator": "Matin Monshizadeh"
+      },
+      "description": "Organic blob (amorphous shape) whose contour morphs via noise-driven control points; pointer proximity influences deformation. Source fingerprints: rAF, noise, pointer; 26,818 bytes.",
+      "licensing": {
+        "source_license": "MIT",
+        "license_url": "https://github.com/matinmonshizadeh/animation-handbook",
+        "verified": true,
+        "evidence": "Repo MIT.",
+        "verified_date": "2026-11-03",
+        "redistribution_allowed": true,
+        "mode": "adapt permitted with attribution (MIT)"
+      },
+      "adaptation": {
+        "authority": "adapt",
+        "plan": "Handbook noise-contour blob (MIT)."
+      },
+      "implementation": {
+        "status": "planned",
+        "target_file": "library/liquid/liq-self-morphing-blob/",
+        "name": "not implemented yet (research phase ended at curation)"
+      },
+      "verification_required": {
+        "viewports": [
+          "1440x900",
+          "390x844"
+        ],
+        "console_errors": "0 required",
+        "reduced_motion": "prefers-reduced-motion must degrade to a still",
+        "licence_gate": "per-entry licence block must remain verified at merge time"
+      },
+      "inspection_basis": {
+        "source_inspected": true,
+        "browser_inspected": true,
+        "demo_fetched": false,
+        "confidence": "high"
+      },
+      "research_notes": "Noise-contour blob; cheap and organic."
+    },
+    {
+      "id": "liq-self-displacement-hover",
+      "name": "Handbook — Image Distortion Hover",
+      "category": "liquid",
+      "subcategory": "displacement",
+      "complexity": "medium",
+      "rendering": "webgl-2d",
+      "research_candidate": "liquid-021",
+      "inspiration": {
+        "demo_url": "https://matinmonshizadeh.github.io/animation-handbook/animations/06-3d-advanced/image-distortion-hover/",
+        "source_url": "https://raw.githubusercontent.com/matinmonshizadeh/animation-handbook/main/animations/06-3d-advanced/image-distortion-hover/index.html",
+        "repository_url": "https://github.com/matinmonshizadeh/animation-handbook",
+        "creator": "Matin Monshizadeh"
+      },
+      "description": "Hovering an image displaces its surface via a GLSL displacement shader fed by pointer position/velocity. Source fingerprints: rAF, canvas, GLSL, pointer; 32,609 bytes.",
+      "licensing": {
+        "source_license": "MIT",
+        "license_url": "https://github.com/matinmonshizadeh/animation-handbook",
+        "verified": true,
+        "evidence": "Repo MIT. Any bundled demo image assets: check for third-party photos.",
+        "verified_date": "2026-11-03",
+        "redistribution_allowed": true,
+        "mode": "adapt permitted with attribution (MIT)"
+      },
+      "adaptation": {
+        "authority": "adapt",
+        "plan": "Handbook pointer displacement shader (MIT)."
+      },
+      "implementation": {
+        "status": "planned",
+        "target_file": "library/liquid/liq-self-displacement-hover/",
+        "name": "not implemented yet (research phase ended at curation)"
+      },
+      "verification_required": {
+        "viewports": [
+          "1440x900",
+          "390x844"
+        ],
+        "console_errors": "0 required",
+        "reduced_motion": "prefers-reduced-motion must degrade to a still",
+        "licence_gate": "per-entry licence block must remain verified at merge time"
+      },
+      "inspection_basis": {
+        "source_inspected": true,
+        "browser_inspected": true,
+        "demo_fetched": false,
+        "confidence": "high"
+      },
+      "research_notes": "Pointer displacement shader on hover."
+    },
+    {
+      "id": "liq-self-svg-goo-metaballs",
+      "name": "Creative Gooey Effects",
+      "category": "liquid",
+      "subcategory": "metaballs",
+      "complexity": "low",
+      "rendering": "svg",
+      "research_candidate": "liquid-011",
+      "inspiration": {
+        "demo_url": "https://tympanus.net/Development/CreativeGooeyEffects/",
+        "source_url": "https://tympanus.net/codrops/2015/03/10/creative-gooey-effects/",
+        "repository_url": "",
+        "creator": "Lucas Bebber"
+      },
+      "description": "Lucas Bebber's canonical SVG 'goo' filter: a heavy feGaussianBlur combined with an feColorMatrix alpha-contrast boost fuses separate DOM/SVG elements into metaball-like blobs that stretch and split, used for menus, buttons and droplets.",
+      "licensing": {
+        "source_license": "unverified",
+        "license_url": "",
+        "technique_reference_url": "https://tympanus.net/codrops/2015/03/10/creative-gooey-effects/",
+        "verified": false,
+        "evidence": "Demo + article fetched; license not stated. | licence gate FAIL: cannot be adopted into library until licence resolved",
+        "verified_date": "2026-11-03",
+        "redistribution_allowed": "technique-level only; no source ingestion",
+        "mode": "reimplementation from documented technique"
+      },
+      "adaptation": {
+        "authority": "reinvent",
+        "plan": "Technique reference: Codrops 'Creative Gooey Effects' (demo rights; technique is standard SVG filter primitives). Reimplement the feGaussianBlur->feColorMatrix chain from documented filter math; credit Lucas Bebber's technique article as inspiration only."
+      },
+      "implementation": {
+        "status": "planned",
+        "target_file": "library/liquid/liq-self-svg-goo-metaballs/",
+        "name": "not implemented yet (research phase ended at curation)"
+      },
+      "verification_required": {
+        "viewports": [
+          "1440x900",
+          "390x844"
+        ],
+        "console_errors": "0 required",
+        "reduced_motion": "prefers-reduced-motion must degrade to a still",
+        "licence_gate": "per-entry licence block must remain verified at merge time"
+      },
+      "inspection_basis": {
+        "source_inspected": false,
+        "browser_inspected": false,
+        "demo_fetched": false,
+        "confidence": "high"
+      },
+      "research_notes": "Both URLs fetched 200; author extracted from article byline. The definitive goo/metaball filter demo (2015) that CSS-Tricks and countless CodePens derive from. ~30-line SVG goo/metadata-filter technique with huge payoff; iconic."
+    },
+    {
+      "id": "shd-self-fragment-noise-field",
+      "name": "three.js — webgl_shader_lava",
+      "category": "3d-shaders",
+      "subcategory": "procedural-noise",
+      "complexity": "low",
+      "rendering": "webgl-3d",
+      "research_candidate": "3d-shaders-002",
+      "inspiration": {
+        "demo_url": "https://threejs.org/examples/#webgl_shader_lava",
+        "source_url": "https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/webgl_shader_lava.html",
+        "repository_url": "https://github.com/mrdoob/three.js",
+        "creator": "three.js contributors"
+      },
+      "description": "Full-screen quad driven by a GLSL fragment shader generating animated procedural noise (lava-lamp-style flowing color fields) — the canonical 'pure fragment-shader generative background' reference.",
+      "licensing": {
+        "source_license": "MIT",
+        "license_url": "https://github.com/mrdoob/three.js/blob/dev/LICENSE",
+        "verified": true,
+        "evidence": "MIT (three.js). Source fetched raw (5,697 bytes, HTTP 200).",
+        "verified_date": "2026-11-03",
+        "redistribution_allowed": true,
+        "mode": "adapt permitted with attribution (MIT)"
+      },
+      "adaptation": {
+        "authority": "adapt",
+        "plan": "three.js webgl_shader_lava (MIT): fullscreen quad + animated procedural noise."
+      },
+      "implementation": {
+        "status": "planned",
+        "target_file": "library/3d-shaders/shd-self-fragment-noise-field/",
+        "name": "not implemented yet (research phase ended at curation)"
+      },
+      "verification_required": {
+        "viewports": [
+          "1440x900",
+          "390x844"
+        ],
+        "console_errors": "0 required",
+        "reduced_motion": "prefers-reduced-motion must degrade to a still",
+        "licence_gate": "per-entry licence block must remain verified at merge time"
+      },
+      "inspection_basis": {
+        "source_inspected": true,
+        "browser_inspected": false,
+        "demo_fetched": false,
+        "confidence": "high"
+      },
+      "research_notes": "Source fetched; confirms single-quad + fragment noise architecture with no assets. Fullscreen-noise reference; zero assets."
+    },
+    {
+      "id": "shd-self-vertex-displacement-map",
+      "name": "three.js — webgl_materials_displacementmap",
+      "category": "3d-shaders",
+      "subcategory": "vertex-distort",
+      "complexity": "medium",
+      "rendering": "webgl-3d",
+      "research_candidate": "3d-shaders-001",
+      "inspiration": {
+        "demo_url": "https://threejs.org/examples/#webgl_materials_displacementmap",
+        "source_url": "https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/webgl_materials_displacementmap.html",
+        "repository_url": "https://github.com/mrdoob/three.js",
+        "creator": "three.js contributors"
+      },
+      "description": "Official three.js example: a plane mesh's vertices are displaced in the vertex shader by a texture heightmap with normal recomputation; classic displacement-map pattern applicable to terrain-style or fabric-like motion surfaces.",
+      "licensing": {
+        "source_license": "MIT",
+        "license_url": "https://github.com/mrdoob/three.js/blob/dev/LICENSE",
+        "verified": true,
+        "evidence": "three.js MIT verified via GitHub API (★117k). Example source fetched raw (6,703 bytes, HTTP 200).",
+        "verified_date": "2026-11-03",
+        "redistribution_allowed": true,
+        "mode": "adapt permitted with attribution (MIT)"
+      },
+      "adaptation": {
+        "authority": "adapt",
+        "plan": "three.js webgl_materials_displacementmap (MIT): heightmap-vertex displacement + normals."
+      },
+      "implementation": {
+        "status": "planned",
+        "target_file": "library/3d-shaders/shd-self-vertex-displacement-map/",
+        "name": "not implemented yet (research phase ended at curation)"
+      },
+      "verification_required": {
+        "viewports": [
+          "1440x900",
+          "390x844"
+        ],
+        "console_errors": "0 required",
+        "reduced_motion": "prefers-reduced-motion must degrade to a still",
+        "licence_gate": "per-entry licence block must remain verified at merge time"
+      },
+      "inspection_basis": {
+        "source_inspected": true,
+        "browser_inspected": false,
+        "demo_fetched": false,
+        "confidence": "high"
+      },
+      "research_notes": "Raw example HTML fetched and confirmed to contain the displacement shader setup; files.json listing on threejs.org verified the example names. Official three.js; source fetched; canonical displacement."
+    },
+    {
+      "id": "shd-self-chromatic-displacement-hover",
+      "name": "Interactive WebGL Hover Effects — akella step3 (Codrops)",
+      "category": "3d-shaders",
+      "subcategory": "vertex-distort",
+      "complexity": "medium",
+      "rendering": "webgl-3d",
+      "research_candidate": "3d-shaders-007",
+      "inspiration": {
+        "demo_url": "https://tympanus.net/Tutorials/webgl-mouseover-effects/step3.html",
+        "source_url": "https://github.com/akella/webgl-mouseover-effects",
+        "repository_url": "https://github.com/akella/webgl-mouseover-effects",
+        "creator": "akella (Dennis Sylka?) / Codrops"
+      },
+      "description": "Codrops tutorial final demo: hovering an image ripples/displaces its surface with Three.js — mouse position drives shader uniforms, and the covered article documents the chromatic-aberration-by-channel-offset GLSL snippet (RGB sampled at different velocity-scaled offsets).",
+      "licensing": {
+        "source_license": "MIT",
+        "license_url": "https://api.github.com/repos/akella/webgl-mouseover-effects",
+        "verified": true,
+        "evidence": "Repo MIT verified via GitHub API (★404). Demo step1.html and step3.html both fetched 200; article GLSL snippet read directly.",
+        "verified_date": "2026-11-03",
+        "redistribution_allowed": true,
+        "mode": "adapt permitted with attribution (MIT)"
+      },
+      "adaptation": {
+        "authority": "adapt",
+        "plan": "akella webgl-mouseover-effects (MIT, demos fetched): mouse-velocity displacement + RGB-offset chromatic aberration."
+      },
+      "implementation": {
+        "status": "planned",
+        "target_file": "library/3d-shaders/shd-self-chromatic-displacement-hover/",
+        "name": "not implemented yet (research phase ended at curation)"
+      },
+      "verification_required": {
+        "viewports": [
+          "1440x900",
+          "390x844"
+        ],
+        "console_errors": "0 required",
+        "reduced_motion": "prefers-reduced-motion must degrade to a still",
+        "licence_gate": "per-entry licence block must remain verified at merge time"
+      },
+      "inspection_basis": {
+        "source_inspected": true,
+        "browser_inspected": false,
+        "demo_fetched": false,
+        "confidence": "high"
+      },
+      "research_notes": "Demo pages fetched (step1 3,134 bytes; step3 4,899 bytes). Article contains actual fragment shader text for chromatic aberration. MIT; actual GLSL chromatic-displacement hover, demos fetched."
+    },
+    {
+      "id": "shd-self-scroll-3d-rotation",
+      "name": "Handbook — Scroll-Driven 3D Rotation",
+      "category": "3d-shaders",
+      "subcategory": "perspective",
+      "complexity": "low",
+      "rendering": "dom",
+      "research_candidate": "3d-shaders-012",
+      "inspiration": {
+        "demo_url": "https://matinmonshizadeh.github.io/animation-handbook/animations/06-3d-advanced/scroll-driven-3d-rotation/",
+        "source_url": "https://raw.githubusercontent.com/matinmonshizadeh/animation-handbook/main/animations/06-3d-advanced/scroll-driven-3d-rotation/index.html",
+        "repository_url": "https://github.com/matinmonshizadeh/animation-handbook",
+        "creator": "Matin Monshizadeh"
+      },
+      "description": "3D object rotates as page scrolls — CSS perspective/rotate driven by scroll position with rAF smoothing. Source fingerprints: rAF, CSS transform with perspective/rotate, scroll tokens; 25,352 bytes.",
+      "licensing": {
+        "source_license": "MIT",
+        "license_url": "https://github.com/matinmonshizadeh/animation-handbook",
+        "verified": true,
+        "evidence": "Repo MIT.",
+        "verified_date": "2026-11-03",
+        "redistribution_allowed": true,
+        "mode": "adapt permitted with attribution (MIT)"
+      },
+      "adaptation": {
+        "authority": "adapt",
+        "plan": "Handbook CSS-3D scroll rotation (MIT): scrollY -> perspective/rotateX with smoothing."
+      },
+      "implementation": {
+        "status": "planned",
+        "target_file": "library/3d-shaders/shd-self-scroll-3d-rotation/",
+        "name": "not implemented yet (research phase ended at curation)"
+      },
+      "verification_required": {
+        "viewports": [
+          "1440x900",
+          "390x844"
+        ],
+        "console_errors": "0 required",
+        "reduced_motion": "prefers-reduced-motion must degrade to a still",
+        "licence_gate": "per-entry licence block must remain verified at merge time"
+      },
+      "inspection_basis": {
+        "source_inspected": true,
+        "browser_inspected": true,
+        "demo_fetched": false,
+        "confidence": "high"
+      },
+      "research_notes": "CSS-3D scroll rotation; simple but distinctive."
+    },
+    {
+      "id": "shd-self-gpgpu-water",
+      "name": "three.js — webgl_gpgpu_water",
+      "category": "3d-shaders",
+      "subcategory": "vertex-distort",
+      "complexity": "high",
+      "rendering": "webgl-3d",
+      "research_candidate": "3d-shaders-005",
+      "inspiration": {
+        "demo_url": "https://threejs.org/examples/#webgl_gpgpu_water",
+        "source_url": "https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/webgl_gpgpu_water.html",
+        "repository_url": "https://github.com/mrdoob/three.js",
+        "creator": "three.js contributors (by David Sjetel)"
+      },
+      "description": "GPGPU water surface: a heightfield is computed in texture-space (ping-pong render targets) and rendered as a deformed grid mesh with dynamic normals — the reference architecture for GPU-computed surfaces that animate meshes.",
+      "licensing": {
+        "source_license": "MIT",
+        "license_url": "https://github.com/mrdoob/three.js/blob/dev/LICENSE",
+        "verified": true,
+        "evidence": "MIT (three.js). Source fetched raw (22,596 bytes, HTTP 200 — the largest, confirming the GPGPU pass structure).",
+        "verified_date": "2026-11-03",
+        "redistribution_allowed": true,
+        "mode": "adapt permitted with attribution (MIT)"
+      },
+      "adaptation": {
+        "authority": "adapt",
+        "plan": "three.js webgl_gpgpu_water (MIT, source read): GPGPU heightfield -> deformed grid with recomputed normals."
+      },
+      "implementation": {
+        "status": "planned",
+        "target_file": "library/3d-shaders/shd-self-gpgpu-water/",
+        "name": "not implemented yet (research phase ended at curation)"
+      },
+      "verification_required": {
+        "viewports": [
+          "1440x900",
+          "390x844"
+        ],
+        "console_errors": "0 required",
+        "reduced_motion": "prefers-reduced-motion must degrade to a still",
+        "licence_gate": "per-entry licence block must remain verified at merge time"
+      },
+      "inspection_basis": {
+        "source_inspected": true,
+        "browser_inspected": false,
+        "demo_fetched": false,
+        "confidence": "high"
+      },
+      "research_notes": "Source fetched; ping-pong + GPUComputationRenderer usage confirmed in file. GPGPU heightfield-to-mesh reference architecture."
+    },
+    {
+      "id": "tra-self-mesh-gradient",
+      "name": "Handbook — Mesh Gradient",
+      "category": "transitions",
+      "subcategory": "mesh-gradient",
+      "complexity": "low",
+      "rendering": "svg",
+      "research_candidate": "transitions-022",
+      "inspiration": {
+        "demo_url": "https://matinmonshizadeh.github.io/animation-handbook/animations/07-ambient-background/mesh-gradient/",
+        "source_url": "https://raw.githubusercontent.com/matinmonshizadeh/animation-handbook/main/animations/07-ambient-background/mesh-gradient/index.html",
+        "repository_url": "https://github.com/matinmonshizadeh/animation-handbook",
+        "creator": "Matin Monshizadeh"
+      },
+      "description": "Animated mesh gradient background: smooth multi-point colour field evolving over time (SVG-filter-based per source fingerprint: svg only, no canvas/WebGL; 24,678 bytes). Also captured at mobile 390x844.",
+      "licensing": {
+        "source_license": "MIT",
+        "license_url": "https://github.com/matinmonshizadeh/animation-handbook",
+        "verified": true,
+        "evidence": "Repo MIT.",
+        "verified_date": "2026-11-03",
+        "redistribution_allowed": true,
+        "mode": "adapt permitted with attribution (MIT)"
+      },
+      "adaptation": {
+        "authority": "adapt",
+        "plan": "Handbook SVG-filter mesh gradient (MIT)."
+      },
+      "implementation": {
+        "status": "planned",
+        "target_file": "library/transitions/tra-self-mesh-gradient/",
+        "name": "not implemented yet (research phase ended at curation)"
+      },
+      "verification_required": {
+        "viewports": [
+          "1440x900",
+          "390x844"
+        ],
+        "console_errors": "0 required",
+        "reduced_motion": "prefers-reduced-motion must degrade to a still",
+        "licence_gate": "per-entry licence block must remain verified at merge time"
+      },
+      "inspection_basis": {
+        "source_inspected": true,
+        "browser_inspected": true,
+        "demo_fetched": false,
+        "confidence": "high"
+      },
+      "research_notes": "SVG-filter mesh gradient; mobile verified."
+    },
+    {
+      "id": "tra-self-morph-page-transition",
+      "name": "Handbook — Morph Transition (page transition)",
+      "category": "transitions",
+      "subcategory": "morph",
+      "complexity": "medium",
+      "rendering": "svg",
+      "research_candidate": "transitions-023",
+      "inspiration": {
+        "demo_url": "https://matinmonshizadeh.github.io/animation-handbook/animations/03-page-transitions/morph-transition/",
+        "source_url": "https://raw.githubusercontent.com/matinmonshizadeh/animation-handbook/main/animations/03-page-transitions/morph-transition/index.html",
+        "repository_url": "https://github.com/matinmonshizadeh/animation-handbook",
+        "creator": "Matin Monshizadeh"
+      },
+      "description": "Page transition where a shape morphs across the viewport to reveal the next view (SVG shape morphing with rAF). Source fingerprints: rAF, svg; 27,404 bytes.",
+      "licensing": {
+        "source_license": "MIT",
+        "license_url": "https://github.com/matinmonshizadeh/animation-handbook",
+        "verified": true,
+        "evidence": "Repo MIT.",
+        "verified_date": "2026-11-03",
+        "redistribution_allowed": true,
+        "mode": "adapt permitted with attribution (MIT)"
+      },
+      "adaptation": {
+        "authority": "adapt",
+        "plan": "Handbook shape-morph page transition (MIT)."
+      },
+      "implementation": {
+        "status": "planned",
+        "target_file": "library/transitions/tra-self-morph-page-transition/",
+        "name": "not implemented yet (research phase ended at curation)"
+      },
+      "verification_required": {
+        "viewports": [
+          "1440x900",
+          "390x844"
+        ],
+        "console_errors": "0 required",
+        "reduced_motion": "prefers-reduced-motion must degrade to a still",
+        "licence_gate": "per-entry licence block must remain verified at merge time"
+      },
+      "inspection_basis": {
+        "source_inspected": true,
+        "browser_inspected": true,
+        "demo_fetched": false,
+        "confidence": "high"
+      },
+      "research_notes": "Shape-morph page transition."
+    },
+    {
+      "id": "tra-self-synthwave-grid",
+      "name": "Handbook — Synthwave Grid",
+      "category": "transitions",
+      "subcategory": "grid-animation",
+      "complexity": "low",
+      "rendering": "dom",
+      "research_candidate": "transitions-024",
+      "inspiration": {
+        "demo_url": "https://matinmonshizadeh.github.io/animation-handbook/animations/07-ambient-background/synthwave-grid/",
+        "source_url": "https://raw.githubusercontent.com/matinmonshizadeh/animation-handbook/main/animations/07-ambient-background/synthwave-grid/index.html",
+        "repository_url": "https://github.com/matinmonshizadeh/animation-handbook",
+        "creator": "Matin Monshizadeh"
+      },
+      "description": "Animated perspective grid floor (synthwave/retro aesthetic): CSS 3D perspective grid with animated translateZ loop; canvas+svg fingerprints in source (24,653 bytes).",
+      "licensing": {
+        "source_license": "MIT",
+        "license_url": "https://github.com/matinmonshizadeh/animation-handbook",
+        "verified": true,
+        "evidence": "Repo MIT.",
+        "verified_date": "2026-11-03",
+        "redistribution_allowed": true,
+        "mode": "adapt permitted with attribution (MIT)"
+      },
+      "adaptation": {
+        "authority": "adapt",
+        "plan": "Handbook CSS perspective grid loop (MIT)."
+      },
+      "implementation": {
+        "status": "planned",
+        "target_file": "library/transitions/tra-self-synthwave-grid/",
+        "name": "not implemented yet (research phase ended at curation)"
+      },
+      "verification_required": {
+        "viewports": [
+          "1440x900",
+          "390x844"
+        ],
+        "console_errors": "0 required",
+        "reduced_motion": "prefers-reduced-motion must degrade to a still",
+        "licence_gate": "per-entry licence block must remain verified at merge time"
+      },
+      "inspection_basis": {
+        "source_inspected": true,
+        "browser_inspected": true,
+        "demo_fetched": false,
+        "confidence": "high"
+      },
+      "research_notes": "CSS grid perspective loop; stylistically specific."
+    },
+    {
+      "id": "tra-self-wave-layers",
+      "name": "Handbook — Wave Layers",
+      "category": "transitions",
+      "subcategory": "wave",
+      "complexity": "low",
+      "rendering": "svg",
+      "research_candidate": "transitions-025",
+      "inspiration": {
+        "demo_url": "https://matinmonshizadeh.github.io/animation-handbook/animations/07-ambient-background/wave-layers/",
+        "source_url": "https://raw.githubusercontent.com/matinmonshizadeh/animation-handbook/main/animations/07-ambient-background/wave-layers/index.html",
+        "repository_url": "https://github.com/matinmonshizadeh/animation-handbook",
+        "creator": "Matin Monshizadeh"
+      },
+      "description": "Layered SVG waves animating horizontally at different speeds to form a layered water-like ambient background (svg-only source; 25,014 bytes).",
+      "licensing": {
+        "source_license": "MIT",
+        "license_url": "https://github.com/matinmonshizadeh/animation-handbook",
+        "verified": true,
+        "evidence": "Repo MIT.",
+        "verified_date": "2026-11-03",
+        "redistribution_allowed": true,
+        "mode": "adapt permitted with attribution (MIT)"
+      },
+      "adaptation": {
+        "authority": "adapt",
+        "plan": "Handbook layered SVG waves (MIT)."
+      },
+      "implementation": {
+        "status": "planned",
+        "target_file": "library/transitions/tra-self-wave-layers/",
+        "name": "not implemented yet (research phase ended at curation)"
+      },
+      "verification_required": {
+        "viewports": [
+          "1440x900",
+          "390x844"
+        ],
+        "console_errors": "0 required",
+        "reduced_motion": "prefers-reduced-motion must degrade to a still",
+        "licence_gate": "per-entry licence block must remain verified at merge time"
+      },
+      "inspection_basis": {
+        "source_inspected": true,
+        "browser_inspected": true,
+        "demo_fetched": false,
+        "confidence": "high"
+      },
+      "research_notes": "Layered wave SVG; ambient staple."
+    },
+    {
+      "id": "tra-self-animated-gradient-bg",
+      "name": "Handbook — Animated Gradient Background",
+      "category": "transitions",
+      "subcategory": "generative-bg",
+      "complexity": "low",
+      "rendering": "dom",
+      "research_candidate": "transitions-026",
+      "inspiration": {
+        "demo_url": "https://matinmonshizadeh.github.io/animation-handbook/animations/07-ambient-background/animated-gradient-background/",
+        "source_url": "https://raw.githubusercontent.com/matinmonshizadeh/animation-handbook/main/animations/07-ambient-background/animated-gradient-background/index.html",
+        "repository_url": "https://github.com/matinmonshizadeh/animation-handbook",
+        "creator": "Matin Monshizadeh"
+      },
+      "description": "Generative animated gradient background (transform/gradient tokens in source; svg; 31,296 bytes) — slow ambient colour motion.",
+      "licensing": {
+        "source_license": "MIT",
+        "license_url": "https://github.com/matinmonshizadeh/animation-handbook",
+        "verified": true,
+        "evidence": "Repo MIT.",
+        "verified_date": "2026-11-03",
+        "redistribution_allowed": true,
+        "mode": "adapt permitted with attribution (MIT)"
+      },
+      "adaptation": {
+        "authority": "adapt",
+        "plan": "Handbook generative gradient background (MIT)."
+      },
+      "implementation": {
+        "status": "planned",
+        "target_file": "library/transitions/tra-self-animated-gradient-bg/",
+        "name": "not implemented yet (research phase ended at curation)"
+      },
+      "verification_required": {
+        "viewports": [
+          "1440x900",
+          "390x844"
+        ],
+        "console_errors": "0 required",
+        "reduced_motion": "prefers-reduced-motion must degrade to a still",
+        "licence_gate": "per-entry licence block must remain verified at merge time"
+      },
+      "inspection_basis": {
+        "source_inspected": true,
+        "browser_inspected": true,
+        "demo_fetched": false,
+        "confidence": "high"
+      },
+      "research_notes": "Gradient background loop; common but useful."
+    },
+    {
+      "id": "tra-self-parallax-depth-of-field",
+      "name": "Handbook — Parallax Depth-of-Field",
+      "category": "transitions",
+      "subcategory": "scroll",
+      "complexity": "medium",
+      "rendering": "dom",
+      "research_candidate": "transitions-027",
+      "inspiration": {
+        "demo_url": "https://matinmonshizadeh.github.io/animation-handbook/animations/01-scroll-based/parallax-depth-of-field/",
+        "source_url": "https://github.com/matinmonshizadeh/animation-handbook/tree/main/animations/01-scroll-based/parallax-depth-of-field",
+        "repository_url": "https://github.com/matinmonshizadeh/animation-handbook",
+        "creator": "Matin Monshizadeh"
+      },
+      "description": "Layered blurred depth planes scroll at their own speed while focus shifts — cinematic parallax. Verified visually: blurred mountain silhouettes shifting at different rates; page snapshot + 0 console errors.",
+      "licensing": {
+        "source_license": "MIT",
+        "license_url": "https://github.com/matinmonshizadeh/animation-handbook",
+        "verified": true,
+        "evidence": "Repo MIT.",
+        "verified_date": "2026-11-03",
+        "redistribution_allowed": true,
+        "mode": "adapt permitted with attribution (MIT)"
+      },
+      "adaptation": {
+        "authority": "adapt",
+        "plan": "Handbook parallax depth layers (MIT). NOTE: browser-inspected only — inspect raw index.html during implementation before coding."
+      },
+      "implementation": {
+        "status": "planned",
+        "target_file": "library/transitions/tra-self-parallax-depth-of-field/",
+        "name": "not implemented yet (research phase ended at curation)"
+      },
+      "verification_required": {
+        "viewports": [
+          "1440x900",
+          "390x844"
+        ],
+        "console_errors": "0 required",
+        "reduced_motion": "prefers-reduced-motion must degrade to a still",
+        "licence_gate": "per-entry licence block must remain verified at merge time"
+      },
+      "inspection_basis": {
+        "source_inspected": false,
+        "browser_inspected": true,
+        "demo_fetched": false,
+        "confidence": "medium"
+      },
+      "research_notes": "Browser-inspected only (no source read this pass)."
+    },
+    {
+      "id": "tra-self-curtains-geometry-mask",
+      "name": "curtains.js",
+      "category": "transitions",
+      "subcategory": "mask-transition",
+      "complexity": "high",
+      "rendering": "webgl-2d",
+      "research_candidate": "transitions-007",
+      "inspiration": {
+        "demo_url": "https://github.com/martinlaxenaire/curtainsjs",
+        "source_url": "https://github.com/martinlaxenaire/curtainsjs",
+        "repository_url": "https://github.com/martinlaxenaire/curtainsjs",
+        "creator": "Martin Laxenaire"
+      },
+      "description": "WebGL library that turns DOM elements into interactive textured planes; its examples include displacement/spherical transitions where a geometry shader 'mask' moves across a plane to swap or distort images, all synced to the real HTML elements.",
+      "licensing": {
+        "source_license": "MIT",
+        "license_url": "https://api.github.com/repos/martinlaxenaire/curtainsjs",
+        "technique_reference_url": "https://api.github.com/repos/martinlaxenaire/curtainsjs",
+        "verified": true,
+        "evidence": "MIT verified via GitHub API 2026-11-03 (★1827).",
+        "verified_date": "2026-11-03",
+        "redistribution_allowed": "technique-level only; no source ingestion",
+        "mode": "reimplementation from documented technique"
+      },
+      "adaptation": {
+        "authority": "reinvent",
+        "plan": "curtains.js (MIT, ★1827) — our entry re-implements ONE geometry-mask transition pattern using the documented DOM-plane approach; credit Martin Laxenaire."
+      },
+      "implementation": {
+        "status": "planned",
+        "target_file": "library/transitions/tra-self-curtains-geometry-mask/",
+        "name": "not implemented yet (research phase ended at curation)"
+      },
+      "verification_required": {
+        "viewports": [
+          "1440x900",
+          "390x844"
+        ],
+        "console_errors": "0 required",
+        "reduced_motion": "prefers-reduced-motion must degrade to a still",
+        "licence_gate": "per-entry licence block must remain verified at merge time"
+      },
+      "inspection_basis": {
+        "source_inspected": false,
+        "browser_inspected": false,
+        "demo_fetched": true,
+        "confidence": "medium"
+      },
+      "research_notes": "Repo fetched (HTTP 200) with real file listing and docs structure; the CSS-Tricks article by the same author (fetched 200) documents the displacement slideshow technique. Library is well-maintained and framework-free. curtains.js MIT; plane/WebGL interface for DOM images."
+    },
+    {
+      "id": "cmp-self-physics-playground-portfolio",
+      "name": "Bruno Simon's Folio 2019 portfolio",
+      "category": "composition",
+      "subcategory": "portfolio",
+      "complexity": "high",
+      "rendering": "webgl-3d",
+      "research_candidate": "composition-005",
+      "inspiration": {
+        "demo_url": "https://bruno-simon.com",
+        "source_url": "https://bruno-simon.com",
+        "repository_url": "https://github.com/brunosimon/folio-2019",
+        "creator": "Bruno Simon"
+      },
+      "description": "Drivable-car navigation through a compiled portfolio world, combining three.js 3D customization, physics (custom Box2D setup), video billboards, pothole mini-games and a chat Easter egg. It is the most-cited example of a complete playful composition with fully published source.",
+      "licensing": {
+        "source_license": "MIT",
+        "license_url": "https://api.github.com/repos/brunosimon/folio-2019",
+        "verified": true,
+        "evidence": "MIT verified via GitHub API 2026-11-03 (★4753). ",
+        "verified_date": "2026-11-03",
+        "redistribution_allowed": true,
+        "mode": "adapt permitted with attribution (MIT)"
+      },
+      "adaptation": {
+        "authority": "adapt",
+        "plan": "folio-2019 (MIT, ★4753): study scene-config-driven composition and Box2D navigation; our composition recipe documents the data-driven pattern."
+      },
+      "implementation": {
+        "status": "planned",
+        "target_file": "library/composition/cmp-self-physics-playground-portfolio/",
+        "name": "not implemented yet (research phase ended at curation)"
+      },
+      "verification_required": {
+        "viewports": [
+          "1440x900",
+          "390x844"
+        ],
+        "console_errors": "0 required",
+        "reduced_motion": "prefers-reduced-motion must degrade to a still",
+        "licence_gate": "per-entry licence block must remain verified at merge time"
+      },
+      "inspection_basis": {
+        "source_inspected": false,
+        "browser_inspected": false,
+        "demo_fetched": true,
+        "confidence": "high"
+      },
+      "research_notes": "Verified: bruno-simon.com fetched HTTP 200 (title 'Bruno's'); github.com/brunosimon/folio-2019 fetched HTTP 200. Repo URL surfaced via tavily and confirmed by fetch. Awwwards case study exists (awwwards.com/brunos-portfolio-case-study.html). folio-2019 MIT, ★4753; full physics-driven portfolio codebase — the composition benchmark with open source."
+    },
+    {
+      "id": "cmp-self-audio-reactive-suite",
+      "name": "Chrome Music Lab",
+      "category": "composition",
+      "subcategory": "multi-scene",
+      "complexity": "medium",
+      "rendering": "canvas-2d",
+      "research_candidate": "composition-030",
+      "inspiration": {
+        "demo_url": "https://musiclab.chromeexperiments.com",
+        "source_url": "https://github.com/googlecreativelab/chrome-music-lab",
+        "repository_url": "https://github.com/googlecreativelab/chrome-music-lab",
+        "creator": "Google Creative Lab + Use All Five"
+      },
+      "description": "Google Creative Lab's music suite composing a dozen separately authored experiments (Kandinsky, Song Maker, Rhythm, Harmonics...) under one launcher design system, all built on Web Audio API with canvas-based visualizers. Fully open-source composition suite.",
+      "licensing": {
+        "source_license": "Apache-2.0",
+        "license_url": "https://api.github.com/repos/googlecreativelab/chrome-music-lab",
+        "verified": true,
+        "evidence": "Apache-2.0 verified via GitHub API 2026-11-03 (★2417).",
+        "verified_date": "2026-11-03",
+        "redistribution_allowed": false,
+        "mode": "adapt permitted with attribution (Apache-2.0)"
+      },
+      "adaptation": {
+        "authority": "adapt",
+        "plan": "Chrome Music Lab (Apache-2.0): adapt one audio+canvas coupling pattern; keep Google attribution."
+      },
+      "implementation": {
+        "status": "planned",
+        "target_file": "library/composition/cmp-self-audio-reactive-suite/",
+        "name": "not implemented yet (research phase ended at curation)"
+      },
+      "verification_required": {
+        "viewports": [
+          "1440x900",
+          "390x844"
+        ],
+        "console_errors": "0 required",
+        "reduced_motion": "prefers-reduced-motion must degrade to a still",
+        "licence_gate": "per-entry licence block must remain verified at merge time"
+      },
+      "inspection_basis": {
+        "source_inspected": false,
+        "browser_inspected": false,
+        "demo_fetched": true,
+        "confidence": "high"
+      },
+      "research_notes": "Verified: demo HTTP 200 ('Chrome Music Lab'); repo HTTP 200 ('A collection of experiments for exploring how music works, all built with the Web Audio API'). Experiments.withgoogle.com lists individual experiments (e.g. Song Maker). Chrome Music Lab Apache-2.0; audio-reactive multi-scene suite with repo."
+    },
+    {
+      "id": "cmp-self-baked-scene-scroll-tour",
+      "name": "My Room in 3D",
+      "category": "composition",
+      "subcategory": "fullscreen",
+      "complexity": "medium",
+      "rendering": "webgl-3d",
+      "research_candidate": "composition-006",
+      "inspiration": {
+        "demo_url": "https://my-room-in-3d.vercel.app/",
+        "source_url": "https://github.com/brunosimon/my-room-in-3d",
+        "repository_url": "https://github.com/brunosimon/my-room-in-3d",
+        "creator": "Bruno Simon"
+      },
+      "description": "A fully open-source three.js rebuild of Bruno Simon's actual room, using a baked textured plane plus multiple cameras with on-scroll camera transitions—an unusually clean composition of baked 3D + scroll choreography. Often referenced as the minimal 'full experience' codebase.",
+      "licensing": {
+        "source_license": "unverified",
+        "license_url": "https://github.com/brunosimon/my-room-in-3d",
+        "technique_reference_url": "https://github.com/brunosimon/my-room-in-3d",
+        "verified": false,
+        "evidence": "GitHub API 2026-11-03: ★4527, no SPDX licence — reference-only.",
+        "verified_date": "2026-11-03",
+        "redistribution_allowed": "technique-level only; no source ingestion",
+        "mode": "reimplementation from documented technique"
+      },
+      "adaptation": {
+        "authority": "reinvent",
+        "plan": "my-room-in-3d has NO licence — technique (baked textures + scroll camera path) re-documented from mixed-licence reference; implementation from scratch."
+      },
+      "implementation": {
+        "status": "planned",
+        "target_file": "library/composition/cmp-self-baked-scene-scroll-tour/",
+        "name": "not implemented yet (research phase ended at curation)"
+      },
+      "verification_required": {
+        "viewports": [
+          "1440x900",
+          "390x844"
+        ],
+        "console_errors": "0 required",
+        "reduced_motion": "prefers-reduced-motion must degrade to a still",
+        "licence_gate": "per-entry licence block must remain verified at merge time"
+      },
+      "inspection_basis": {
+        "source_inspected": false,
+        "browser_inspected": false,
+        "demo_fetched": false,
+        "confidence": "high"
+      },
+      "research_notes": "Verified: demo fetched HTTP 200, title 'My Room in 3D'; repo page fetched HTTP 200. Small, fully open three.js composition—rare combination of polish and readability."
+    },
+    {
+      "id": "cmp-self-scrollytelling-data-essay",
+      "name": "The Pudding — How Sonic DNA Connects Generations of Music",
+      "category": "composition",
+      "subcategory": "data-viz-motion",
+      "complexity": "medium",
+      "rendering": "svg",
+      "research_candidate": "composition-031",
+      "inspiration": {
+        "demo_url": "https://pudding.cool/2025/04/music-dna",
+        "source_url": "https://pudding.cool/2025/04/music-dna",
+        "repository_url": "https://github.com/the-pudding",
+        "creator": "The Pudding (contributors per essay)"
+      },
+      "description": "The Pudding visual essay composing animated D3/AI-style charts, scroll-driven narrative beats and visual commentary from musical-generation data — the publication's house style of data-driven motion storytelling. Representative of dozens of similar essays under the same open-source practice.",
+      "licensing": {
+        "source_license": "unverified",
+        "license_url": "https://github.com/the-pudding",
+        "technique_reference_url": "https://github.com/the-pudding",
+        "verified": false,
+        "evidence": "Publication open-sources its codebase structure; per-essay licence not verified — library adoption requires per-essay licence check.",
+        "verified_date": "2026-11-03",
+        "redistribution_allowed": "technique-level only; no source ingestion",
+        "mode": "reimplementation from documented technique"
+      },
+      "adaptation": {
+        "authority": "reinvent",
+        "plan": "The Pudding house style (licence per-essay unverified): document stepper/scroll-beat pattern; implement from scratch."
+      },
+      "implementation": {
+        "status": "planned",
+        "target_file": "library/composition/cmp-self-scrollytelling-data-essay/",
+        "name": "not implemented yet (research phase ended at curation)"
+      },
+      "verification_required": {
+        "viewports": [
+          "1440x900",
+          "390x844"
+        ],
+        "console_errors": "0 required",
+        "reduced_motion": "prefers-reduced-motion must degrade to a still",
+        "licence_gate": "per-entry licence block must remain verified at merge time"
+      },
+      "inspection_basis": {
+        "source_inspected": false,
+        "browser_inspected": false,
+        "demo_fetched": false,
+        "confidence": "medium"
+      },
+      "research_notes": "Verified: pudding.cool HTTP 200; specific essay HTTP 200 with title 'How Sonic DNA Connects Generations of Music'; github.com/the-pudding profile HTTP 200. Essay index on homepage lists 40+ contemporary titles (2025—2026) for follow-up."
+    },
+    {
+      "id": "cmp-self-immersive-story-scroll",
+      "name": "The Boat (SBS)",
+      "category": "composition",
+      "subcategory": "storytelling",
+      "complexity": "high",
+      "rendering": "dom",
+      "research_candidate": "composition-024",
+      "inspiration": {
+        "demo_url": "https://www.sbs.com.au/theboat/",
+        "source_url": "https://www.sbs.com.au/theboat/",
+        "repository_url": "",
+        "creator": "SBS Australia; illustrated by Matt Huynh"
+      },
+      "description": "SBS's adaptation of Nam Le's 'The Boat': a five-chapter interactive graphic novel combining horizontal-scroll chapter navigation, HTML5 canvas frame animation, atmospheric sound and parallax manuscript surfaces. Widely cited as a landmark web storytelling composition.",
+      "licensing": {
+        "source_license": "unverified",
+        "license_url": "",
+        "verified": false,
+        "evidence": "Published piece—no public source.",
+        "verified_date": "",
+        "redistribution_allowed": false,
+        "mode": "reference showcase only (pattern study); nothing adopted"
+      },
+      "adaptation": {
+        "authority": "pattern",
+        "plan": "SBS The Boat — demo verified, no public source; pattern study of audio-illustration scroll coupling only."
+      },
+      "implementation": {
+        "status": "planned",
+        "target_file": "library/composition/cmp-self-immersive-story-scroll/",
+        "name": "not implemented yet (research phase ended at curation)"
+      },
+      "verification_required": {
+        "viewports": [
+          "1440x900",
+          "390x844"
+        ],
+        "console_errors": "0 required",
+        "reduced_motion": "prefers-reduced-motion must degrade to a still",
+        "licence_gate": "per-entry licence block must remain verified at merge time"
+      },
+      "inspection_basis": {
+        "source_inspected": false,
+        "browser_inspected": false,
+        "demo_fetched": false,
+        "confidence": "medium"
+      },
+      "research_notes": "Verified: fetched HTTP 200, title 'The Boat | SBS'. Corroborated by matt huynh portfolio page and multiple scrollytelling roundups (maglr, publicmediaalliance)."
+    },
+    {
+      "id": "cmp-self-css-shape-storytelling",
+      "name": "In Pieces — 30 Endangered Species, 30 Pieces",
+      "category": "composition",
+      "subcategory": "storytelling",
+      "complexity": "medium",
+      "rendering": "css",
+      "research_candidate": "composition-027",
+      "inspiration": {
+        "demo_url": "http://www.species-in-pieces.com",
+        "source_url": "http://www.species-in-pieces.com",
+        "repository_url": "",
+        "creator": "Bryan James"
+      },
+      "description": "Bryan James's classic composition: 30 endangered species built from exactly 30 CSS polygons each, morphing between species with pure CSS transitions over a singular fullscreen simplification system. The best-known 'CSS-only full experience' composition.",
+      "licensing": {
+        "source_license": "unverified",
+        "license_url": "",
+        "verified": false,
+        "evidence": "Concept/release page still live; source not published.",
+        "verified_date": "",
+        "redistribution_allowed": false,
+        "mode": "reference showcase only (pattern study); nothing adopted"
+      },
+      "adaptation": {
+        "authority": "pattern",
+        "plan": "In Pieces — CSS polygon storytelling; no public source; pattern study."
+      },
+      "implementation": {
+        "status": "planned",
+        "target_file": "library/composition/cmp-self-css-shape-storytelling/",
+        "name": "not implemented yet (research phase ended at curation)"
+      },
+      "verification_required": {
+        "viewports": [
+          "1440x900",
+          "390x844"
+        ],
+        "console_errors": "0 required",
+        "reduced_motion": "prefers-reduced-motion must degrade to a still",
+        "licence_gate": "per-entry licence block must remain verified at merge time"
+      },
+      "inspection_basis": {
+        "source_inspected": false,
+        "browser_inspected": false,
+        "demo_fetched": false,
+        "confidence": "medium"
+      },
+      "research_notes": "Verified: fetched HTTP 200, title 'In Pieces - 30 Endangered Species, 30 Pieces.' Technique (30-piece polygon system) is the documented design premise: coherent single-technique storytelling."
+    },
+    {
+      "id": "cmp-self-scroll-story-capsules",
+      "name": "Neal.fun — The Deep Sea",
+      "category": "composition",
+      "subcategory": "scroll-story",
+      "complexity": "medium",
+      "rendering": "dom",
+      "research_candidate": "composition-028",
+      "inspiration": {
+        "demo_url": "https://neal.fun/deep-sea/",
+        "source_url": "https://neal.fun/deep-sea/",
+        "repository_url": "",
+        "creator": "Neal Agarwal"
+      },
+      "description": "A continuous vertical scroll journey from surface to the Mariana Trench, composing staged encounter cards, depth-tracked background color/lighting shifts and 'max depth' pacing — a simple idea executed as Buddha-grade coherent multi-scene composition.",
+      "licensing": {
+        "source_license": "unverified",
+        "license_url": "",
+        "verified": false,
+        "evidence": "Creator's site; source not published.",
+        "verified_date": "",
+        "redistribution_allowed": false,
+        "mode": "reference showcase only (pattern study); nothing adopted"
+      },
+      "adaptation": {
+        "authority": "pattern",
+        "plan": "Neal.fun Deep Sea — no public source; pattern study of depth-coded scroll frames."
+      },
+      "implementation": {
+        "status": "planned",
+        "target_file": "library/composition/cmp-self-scroll-story-capsules/",
+        "name": "not implemented yet (research phase ended at curation)"
+      },
+      "verification_required": {
+        "viewports": [
+          "1440x900",
+          "390x844"
+        ],
+        "console_errors": "0 required",
+        "reduced_motion": "prefers-reduced-motion must degrade to a still",
+        "licence_gate": "per-entry licence block must remain verified at merge time"
+      },
+      "inspection_basis": {
+        "source_inspected": false,
+        "browser_inspected": false,
+        "demo_fetched": false,
+        "confidence": "medium"
+      },
+      "research_notes": "Verified: fetched HTTP 200, title 'The Deep Sea'. Note neal.fun/the-deep-sea (with 'the-') returned 404 — correct slug is /deep-sea/. Lower request cost than most candidates; perfect focus example."
+    },
+    {
+      "id": "cmp-self-timeline-artifacts-explorer",
+      "name": "Neal.fun — Internet Artifacts",
+      "category": "composition",
+      "subcategory": "multi-scene",
+      "complexity": "high",
+      "rendering": "dom",
+      "research_candidate": "composition-029",
+      "inspiration": {
+        "demo_url": "https://neal.fun/internet-artifacts/",
+        "source_url": "https://neal.fun/internet-artifacts/",
+        "repository_url": "",
+        "creator": "Neal Agarwal"
+      },
+      "description": "A museum-style timeline of internet history composed as sequential 'artifact' scenes: click-through chaptered modules, each with bespoke micro-interactions, unified by a consistent archival visual system. A multi-scene composition with per-scene uniqueness under one design language.",
+      "licensing": {
+        "source_license": "unverified",
+        "license_url": "",
+        "verified": false,
+        "evidence": "No public source.",
+        "verified_date": "",
+        "redistribution_allowed": false,
+        "mode": "reference showcase only (pattern study); nothing adopted"
+      },
+      "adaptation": {
+        "authority": "pattern",
+        "plan": "Neal.fun Internet Artifacts — no public source; pattern study of era-sampled artifact browsing."
+      },
+      "implementation": {
+        "status": "planned",
+        "target_file": "library/composition/cmp-self-timeline-artifacts-explorer/",
+        "name": "not implemented yet (research phase ended at curation)"
+      },
+      "verification_required": {
+        "viewports": [
+          "1440x900",
+          "390x844"
+        ],
+        "console_errors": "0 required",
+        "reduced_motion": "prefers-reduced-motion must degrade to a still",
+        "licence_gate": "per-entry licence block must remain verified at merge time"
+      },
+      "inspection_basis": {
+        "source_inspected": false,
+        "browser_inspected": false,
+        "demo_fetched": false,
+        "confidence": "medium"
+      },
+      "research_notes": "Verified: fetched HTTP 200, title 'Internet Artifacts'. Strong pattern for anthology compositions where each scene is authored separately but shares the system."
+    },
+    {
+      "id": "cmp-self-cinematic-product-intro",
+      "name": "Apple AirPods Pro 3 product page",
+      "category": "composition",
+      "subcategory": "product-intro",
+      "complexity": "high",
+      "rendering": "dom",
+      "research_candidate": "composition-021",
+      "inspiration": {
+        "demo_url": "https://www.apple.com/airpods-pro/",
+        "source_url": "https://www.apple.com/airpods-pro/",
+        "repository_url": "",
+        "creator": "Apple Inc."
+      },
+      "description": "Apple's long-form product page composing scroll-scrubbed video sequences, device-accurate 3D/CG renders, sticky spec reveals and chaptered storytelling — the industry reference for 'scroll-scrubbed video' product intros at massive polish.",
+      "licensing": {
+        "source_license": "unverified",
+        "license_url": "",
+        "verified": false,
+        "evidence": "Proprietary; techniques widely imitated and documentable.",
+        "verified_date": "",
+        "redistribution_allowed": false,
+        "mode": "reference showcase only (pattern study); nothing adopted"
+      },
+      "adaptation": {
+        "authority": "pattern",
+        "plan": "Apple AirPods Pro page — marketing demo; pattern study only, no source."
+      },
+      "implementation": {
+        "status": "planned",
+        "target_file": "library/composition/cmp-self-cinematic-product-intro/",
+        "name": "not implemented yet (research phase ended at curation)"
+      },
+      "verification_required": {
+        "viewports": [
+          "1440x900",
+          "390x844"
+        ],
+        "console_errors": "0 required",
+        "reduced_motion": "prefers-reduced-motion must degrade to a still",
+        "licence_gate": "per-entry licence block must remain verified at merge time"
+      },
+      "inspection_basis": {
+        "source_inspected": false,
+        "browser_inspected": false,
+        "demo_fetched": false,
+        "confidence": "medium"
+      },
+      "research_notes": "Verified: fetched HTTP 200, title 'AirPods Pro 3 - Apple' (title confirms live current-generation page). Apple's scrub-pattern approach is industry-standard documented."
+    },
+    {
+      "id": "cmp-self-webgl-agency-hero",
+      "name": "Lusion v3 (lusion.co)",
+      "category": "composition",
+      "subcategory": "cinematic-hero",
+      "complexity": "high",
+      "rendering": "webgl-3d",
+      "research_candidate": "composition-001",
+      "inspiration": {
+        "demo_url": "https://lusion.co",
+        "source_url": "https://lusion.co",
+        "repository_url": "",
+        "creator": "Lusion Ltd"
+      },
+      "description": "Award-winning studio site composing a real-time 3D WebGL hero character with scroll-coupled scene transitions, physics-driven interaction and micro-interaction UI throughout. It is coherent because the single 3D scene persists and morphs across the entire page rather than being a one-off hero effect. Winner of Awwwards Site of the Year (Lusion v3) and CSSDA WOTY.",
+      "licensing": {
+        "source_license": "unverified",
+        "license_url": "",
+        "verified": false,
+        "evidence": "Commercial studio site; no public source.",
+        "verified_date": "",
+        "redistribution_allowed": false,
+        "mode": "reference showcase only (pattern study); nothing adopted"
+      },
+      "adaptation": {
+        "authority": "pattern",
+        "plan": "Lusion v3 — benchmark reference; closed source; documents the persistent-WebGL-scene pattern qualitatively."
+      },
+      "implementation": {
+        "status": "planned",
+        "target_file": "library/composition/cmp-self-webgl-agency-hero/",
+        "name": "not implemented yet (research phase ended at curation)"
+      },
+      "verification_required": {
+        "viewports": [
+          "1440x900",
+          "390x844"
+        ],
+        "console_errors": "0 required",
+        "reduced_motion": "prefers-reduced-motion must degrade to a still",
+        "licence_gate": "per-entry licence block must remain verified at merge time"
+      },
+      "inspection_basis": {
+        "source_inspected": false,
+        "browser_inspected": false,
+        "demo_fetched": false,
+        "confidence": "medium"
+      },
+      "research_notes": "Verified: fetched HTTP 200, title 'Lusion - Award Winning 3D and Interactive Web Studio'. Awwwards confirms 'Lusion v3' as SOTD/WOTY (awwwards.com/sites/lusion-v3, cssdesignawards.com/woty/lusion-v3/44311). The canonical modern reference for a full multi-technique WebGL composition."
+    }
+  ],
+  "reserves": [
+    {
+      "research_candidate": "typography-001",
+      "name": "Kinetic Typography with Three.js (Codrops, Mario Carrillo)",
+      "category": "typography",
+      "score": 7.95,
+      "licence": "unverified",
+      "reason": "reserve pool for post-v1 expansion / technique reference"
+    },
+    {
+      "research_candidate": "typography-002",
+      "name": "Honk Variable Font Morph (Mandy Michael)",
+      "category": "typography",
+      "score": 8.2,
+      "licence": "unverified",
+      "reason": "reserve pool for post-v1 expansion / technique reference"
+    },
+    {
+      "research_candidate": "typography-009",
+      "name": "Making Stagger Reveal Animations for Text (Codrops)",
+      "category": "typography",
+      "score": 8.0,
+      "licence": "unverified",
+      "reason": "reserve pool for post-v1 expansion / technique reference"
+    },
+    {
+      "research_candidate": "typography-010",
+      "name": "Splitting.js",
+      "category": "typography",
+      "score": 8.35,
+      "licence": "MIT",
+      "reason": "reserve pool for post-v1 expansion / technique reference"
+    },
+    {
+      "research_candidate": "particles-001",
+      "name": "CURL EXPLORER (Thew)",
+      "category": "particles",
+      "score": 7.6,
+      "licence": "unverified",
+      "reason": "reserve pool for post-v1 expansion / technique reference"
+    },
+    {
+      "research_candidate": "particles-004",
+      "name": "three.js example: webgpu_compute_particles",
+      "category": "particles",
+      "score": 8.0,
+      "licence": "MIT",
+      "reason": "reserve pool for post-v1 expansion / technique reference"
+    },
+    {
+      "research_candidate": "particles-006",
+      "name": "THREE Particles (NewKrok) — editor & live examples",
+      "category": "particles",
+      "score": 8.05,
+      "licence": "MIT",
+      "reason": "reserve pool for post-v1 expansion / technique reference"
+    },
+    {
+      "research_candidate": "particles-008",
+      "name": "Photons 2 — Mark Kellogg particle system for Three.js",
+      "category": "particles",
+      "score": 7.8,
+      "licence": "MIT",
+      "reason": "reserve pool for post-v1 expansion / technique reference"
+    },
+    {
+      "research_candidate": "liquid-002",
+      "name": "WebGL Image Transitions slideshow (akella)",
+      "category": "liquid",
+      "score": 7.35,
+      "licence": "unverified",
+      "reason": "reserve pool for post-v1 expansion / technique reference"
+    },
+    {
+      "research_candidate": "liquid-006",
+      "name": "Mouse Flowmap Deformation with OGL",
+      "category": "liquid",
+      "score": 7.75,
+      "licence": "unverified",
+      "reason": "reserve pool for post-v1 expansion / technique reference"
+    },
+    {
+      "research_candidate": "3d-shaders-003",
+      "name": "three.js — webgpu_tsl_earth",
+      "category": "3d-shaders",
+      "score": 7.65,
+      "licence": "MIT",
+      "reason": "reserve pool for post-v1 expansion / technique reference"
+    },
+    {
+      "research_candidate": "3d-shaders-004",
+      "name": "three.js — webgpu_tsl_procedural_terrain",
+      "category": "3d-shaders",
+      "score": 7.45,
+      "licence": "MIT",
+      "reason": "reserve pool for post-v1 expansion / technique reference"
+    },
+    {
+      "research_candidate": "3d-shaders-006",
+      "name": "three.js — webgl_postprocessing_godrays",
+      "category": "3d-shaders",
+      "score": 7.05,
+      "licence": "MIT",
+      "reason": "reserve pool for post-v1 expansion / technique reference"
+    },
+    {
+      "research_candidate": "transitions-002",
+      "name": "Custom Page Transitions in Astro with Barba.js and GSAP",
+      "category": "transitions",
+      "score": 7.7,
+      "licence": "unverified",
+      "reason": "reserve pool for post-v1 expansion / technique reference"
+    },
+    {
+      "research_candidate": "transitions-011",
+      "name": "Scroll Transitions WebGL (Phenomenon)",
+      "category": "transitions",
+      "score": 7.8,
+      "licence": "codrops-style free-use",
+      "reason": "reserve pool for post-v1 expansion / technique reference"
+    },
+    {
+      "research_candidate": "transitions-015",
+      "name": "Wave.js",
+      "category": "transitions",
+      "score": 7.55,
+      "licence": "MIT",
+      "reason": "reserve pool for post-v1 expansion / technique reference"
+    },
+    {
+      "research_candidate": "3d-shaders-010",
+      "name": "Handbook — WebGL Shader Animation",
+      "category": "3d-shaders",
+      "score": 7.95,
+      "licence": "MIT",
+      "reason": "reserve pool for post-v1 expansion / technique reference"
+    },
+    {
+      "research_candidate": "3d-shaders-011",
+      "name": "Handbook — Noise-Based Motion",
+      "category": "3d-shaders",
+      "score": 8.2,
+      "licence": "MIT",
+      "reason": "reserve pool for post-v1 expansion / technique reference"
+    }
+  ],
+  "inspection": {
+    "source_inspected_entries": 26,
+    "browser_inspected_entries": 20,
+    "reinvent_or_pattern_entries": 11
+  }
+}
